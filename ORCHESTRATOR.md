@@ -28,8 +28,8 @@ Este proyecto replica la filosofía arquitectónica, estética minimalista edito
 | **TICKET-04** | Monitor de Consumo del Servidor (Free Tier) y Dashboard Admin | [`tickets/TICKET-04-storage-monitor-and-dashboard.md`](./tickets/TICKET-04-storage-monitor-and-dashboard.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-05** | CRUD Completo de Categorías y Subcategorías | [`tickets/TICKET-05-categories-crud.md`](./tickets/TICKET-05-categories-crud.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-06** | CRUD de Productos, Variantes y Galería Drag & Drop | [`tickets/TICKET-06-products-variants-gallery-crud.md`](./tickets/TICKET-06-products-variants-gallery-crud.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
-| **TICKET-07** | Módulo de Auditoría y Movimientos de Stock | [`tickets/TICKET-07-stock-movements-audit.md`](./tickets/TICKET-07-stock-movements-audit.md) | `[~] IN_PROGRESS` | `tsc --noEmit`, `npm test`, `npm run build` |
-| **TICKET-08** | Gestor de Portada y Home Pública 100% Dinámica | [`tickets/TICKET-08-dynamic-home-and-banners.md`](./tickets/TICKET-08-dynamic-home-and-banners.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
+| **TICKET-07** | Módulo de Auditoría y Movimientos de Stock | [`tickets/TICKET-07-stock-movements-audit.md`](./tickets/TICKET-07-stock-movements-audit.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
+| **TICKET-08** | Gestor de Portada y Home Pública 100% Dinámica | [`tickets/TICKET-08-dynamic-home-and-banners.md`](./tickets/TICKET-08-dynamic-home-and-banners.md) | `[~] IN_PROGRESS` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-09** | Catálogo Público con Filtros por URL y Ficha de Producto (SEO) | [`tickets/TICKET-09-public-catalog-and-product-seo.md`](./tickets/TICKET-09-public-catalog-and-product-seo.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
 
 ---
