@@ -1,11 +1,28 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+export function shouldVerifyEdgeSession(pathname: string): boolean {
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/')
+  const isLoginRoute = pathname === '/login' || pathname.startsWith('/login/')
+  return isAdminRoute || isLoginRoute
+}
+
+export function sanitizeRedirectPath(redirectPath?: string | null): string {
+  if (!redirectPath || typeof redirectPath !== 'string') {
+    return '/admin'
+  }
+  const trimmed = redirectPath.trim()
+  if (!trimmed.startsWith('/admin') || trimmed.startsWith('//')) {
+    return '/admin'
+  }
+  return trimmed
+}
+
 export function resolveAuthRedirect(
   pathname: string,
   isAuthenticated: boolean
 ): string | null {
-  const isAdminRoute = pathname.startsWith('/admin')
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/')
   const isLoginRoute = pathname === '/login' || pathname.startsWith('/login/')
 
   if (isAdminRoute && !isAuthenticated) {
@@ -25,13 +42,13 @@ export async function updateSession(request: NextRequest) {
   })
 
   const pathname = request.nextUrl.pathname
-  const isAdminRoute = pathname.startsWith('/admin')
-  const isLoginRoute = pathname === '/login' || pathname.startsWith('/login/')
 
   // Fast-path: do not block or hit Auth API on public catalog routes
-  if (!isAdminRoute && !isLoginRoute) {
+  if (!shouldVerifyEdgeSession(pathname)) {
     return supabaseResponse
   }
+
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/')
 
   const supabaseUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ??
@@ -45,7 +62,9 @@ export async function updateSession(request: NextRequest) {
 
   if (!supabaseUrl || !supabaseKey) {
     if (isAdminRoute) {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${encodeURIComponent(pathname)}`, request.url)
+      )
     }
     return supabaseResponse
   }

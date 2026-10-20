@@ -23,8 +23,8 @@ Este proyecto replica la filosofía arquitectónica, estética minimalista edito
 | ID | Ticket | Archivo | Estado | Verificación |
 | :--- | :--- | :--- | :---: | :--- |
 | **TICKET-01** | Clonación de Estructura Base y Configuración de Supabase | [`tickets/TICKET-01-setup-and-architecture.md`](./tickets/TICKET-01-setup-and-architecture.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
-| **TICKET-02** | Autenticación de Admin Único y Protección de Rutas (`/admin`) | [`tickets/TICKET-02-admin-auth-and-routing.md`](./tickets/TICKET-02-admin-auth-and-routing.md) | `[~] IN_PROGRESS` | `tsc --noEmit`, `npm test`, `npm run build` |
-| **TICKET-03** | Utilidad de Compresión de Imágenes WebP y Limpieza de Storage | [`tickets/TICKET-03-webp-compression-and-storage.md`](./tickets/TICKET-03-webp-compression-and-storage.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
+| **TICKET-02** | Autenticación de Admin Único y Protección de Rutas (`/admin`) | [`tickets/TICKET-02-admin-auth-and-routing.md`](./tickets/TICKET-02-admin-auth-and-routing.md) | `[x] DONE` | `tsc --noEmit`, `npm test`, `npm run build` |
+| **TICKET-03** | Utilidad de Compresión de Imágenes WebP y Limpieza de Storage | [`tickets/TICKET-03-webp-compression-and-storage.md`](./tickets/TICKET-03-webp-compression-and-storage.md) | `[~] IN_PROGRESS` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-04** | Monitor de Consumo del Servidor (Free Tier) y Dashboard Admin | [`tickets/TICKET-04-storage-monitor-and-dashboard.md`](./tickets/TICKET-04-storage-monitor-and-dashboard.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-05** | CRUD Completo de Categorías y Subcategorías | [`tickets/TICKET-05-categories-crud.md`](./tickets/TICKET-05-categories-crud.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
 | **TICKET-06** | CRUD de Productos, Variantes y Galería Drag & Drop | [`tickets/TICKET-06-products-variants-gallery-crud.md`](./tickets/TICKET-06-products-variants-gallery-crud.md) | `[ ] TODO` | `tsc --noEmit`, `npm test`, `npm run build` |
