@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   },
   description:
     'Vitrina promocional y catálogo digital actualizado en tiempo real con disponibilidad de stock, variantes y ofertas.',
+  icons: {
+    icon: '/assets/img/logo.png',
+    apple: '/assets/img/logo.png',
+  },
 }
 
 export default function RootLayout({

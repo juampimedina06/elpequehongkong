@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -104,14 +105,26 @@ export function AdminSidebar() {
 
       {/* SIDEBAR PARA COMPUTADORA / TABLET (hidden md:flex) */}
       <aside className="hidden md:flex md:w-64 shrink-0 flex-col border-r border-zinc-200 bg-white min-h-screen">
-        <div className="p-5 border-b border-zinc-200">
-          <Link href="/admin" className="block space-y-1 group">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 group-hover:text-zinc-600 transition">
-              Panel de Administración
-            </span>
-            <h2 className="text-base font-bold tracking-tight text-zinc-900">
-              El Peque Hong Kong
-            </h2>
+        <div className="p-4 border-b border-zinc-200">
+          <Link href="/admin" className="flex items-center gap-3 group">
+            <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-zinc-200 bg-white shadow-2xs group-hover:scale-105 transition-transform duration-200">
+              <Image
+                src="/assets/img/logo.png"
+                alt="El Pequeño Hong Kong"
+                fill
+                sizes="40px"
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="min-w-0">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 block group-hover:text-zinc-600 transition truncate leading-none">
+                Administración
+              </span>
+              <h2 className="text-sm font-bold tracking-tight text-zinc-900 truncate mt-1">
+                El Peque Hong Kong
+              </h2>
+            </div>
           </Link>
         </div>
 

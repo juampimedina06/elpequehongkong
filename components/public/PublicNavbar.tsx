@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, Shield, Menu, X, MessageCircle } from 'lucide-react'
 
 export function PublicNavbar() {
@@ -29,18 +30,30 @@ export function PublicNavbar() {
             {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
 
-          {/* Logo Minimalista de Lujo */}
+          {/* Logo Minimalista con Emblema Oficial */}
           <div className="flex items-center">
             <Link
               href="/"
-              className="group flex flex-col items-center md:items-start text-left"
+              className="group flex items-center gap-2.5 sm:gap-3 text-left"
             >
-              <span className="font-black text-base sm:text-lg tracking-[0.25em] uppercase text-zinc-950 group-hover:text-zinc-700 transition">
-                El Peque Hong Kong
-              </span>
-              <span className="hidden sm:block text-[9px] font-medium tracking-[0.3em] uppercase text-zinc-400">
-                Lifestyle &amp; Catalog
-              </span>
+              <div className="relative size-9 sm:size-10 shrink-0 overflow-hidden rounded-full border border-black/15 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                <Image
+                  src="/assets/img/logo.png"
+                  alt="El Pequeño Hong Kong"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-black text-sm sm:text-base tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-700 transition leading-tight">
+                  El Peque Hong Kong
+                </span>
+                <span className="hidden sm:block text-[9px] font-medium tracking-[0.3em] uppercase text-zinc-400">
+                  Lifestyle &amp; Catalog
+                </span>
+              </div>
             </Link>
           </div>
 

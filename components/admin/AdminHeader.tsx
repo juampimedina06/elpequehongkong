@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { LogoutButton } from '@/components/auth/LogoutButton'
 import { ExternalLink, Store } from 'lucide-react'
 
@@ -11,8 +12,16 @@ export function AdminHeader({ adminEmail }: AdminHeaderProps) {
     <header className="h-14 sm:h-16 border-b border-zinc-200 bg-white sticky top-0 z-30 shadow-xs flex items-center">
       <div className="w-full max-w-[1760px] mx-auto px-3.5 sm:px-5 md:px-8 lg:px-10 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="flex md:hidden items-center gap-1.5 font-bold text-zinc-900 text-sm">
-            <Store className="size-4 text-zinc-900" />
+          <div className="flex md:hidden items-center gap-2 font-bold text-zinc-900 text-sm">
+            <div className="relative size-7 shrink-0 overflow-hidden rounded-full border border-zinc-200 bg-white">
+              <Image
+                src="/assets/img/logo.png"
+                alt="El Pequeño Hong Kong"
+                fill
+                sizes="28px"
+                className="object-cover"
+              />
+            </div>
             <span className="truncate">El Peque Hong Kong</span>
           </div>
           <div className="hidden md:flex items-center gap-2 text-xs text-zinc-600 truncate">

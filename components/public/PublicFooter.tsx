@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { MessageCircle, Shield } from 'lucide-react'
 
 export function PublicFooter() {
@@ -7,10 +8,21 @@ export function PublicFooter() {
       <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12">
           {/* Columna de Marca */}
-          <div className="md:col-span-6 space-y-3">
-            <span className="font-black text-lg sm:text-xl tracking-[0.25em] uppercase block">
-              El Peque Hong Kong
-            </span>
+          <div className="md:col-span-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-white/20 bg-white">
+                <Image
+                  src="/assets/img/logo.png"
+                  alt="El Pequeño Hong Kong"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                />
+              </div>
+              <span className="font-black text-lg sm:text-xl tracking-[0.25em] uppercase block">
+                El Peque Hong Kong
+              </span>
+            </div>
             <p className="text-xs text-zinc-400 font-normal leading-relaxed max-w-md">
               Catálogo digital interactivo y vitrina de novedades. Artículos seleccionados de bazar, decoración y tendencias con disponibilidad en tiempo real.
             </p>
