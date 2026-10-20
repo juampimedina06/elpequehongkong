@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import { slugify } from '@/utils/formatters'
 import { createCategoryAction } from '@/actions/categories/categories.actions'
 import type { CategoryRow } from '@/types/database.types'
+import { FolderPlus, X } from 'lucide-react'
 
 interface QuickCategoryModalProps {
   isOpen: boolean
@@ -68,25 +69,27 @@ export function QuickCategoryModal({
       role="dialog"
       aria-modal="true"
       aria-label="Crear categoría rápida"
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-[1px]"
+      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-zinc-950/50 p-0 sm:p-4 backdrop-blur-[2px]"
     >
-      <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-5 shadow-2xl space-y-4">
+      <div className="w-full max-w-sm rounded-t-2xl sm:rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl space-y-4">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-          <div>
-            <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-400">
-              Creación Inline
-            </p>
-            <h3 className="text-sm font-semibold text-zinc-900">
-              Nueva Categoría Rápida
-            </h3>
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-900 text-white">
+              <FolderPlus className="size-3.5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-zinc-900">
+                Nueva Categoría Rápida
+              </h3>
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             disabled={isSaving}
-            className="rounded-md border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-600 hover:bg-zinc-100"
+            className="p-1 text-zinc-400 hover:text-zinc-600 rounded-lg hover:bg-zinc-100 transition"
           >
-            Cerrar
+            <X className="size-4" />
           </button>
         </div>
 
@@ -94,41 +97,36 @@ export function QuickCategoryModal({
           {errorMessage && (
             <div
               role="alert"
-              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+              className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
             >
               {errorMessage}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-medium text-zinc-800 mb-1">
-              Nombre de Categoría *
+            <label className="block text-xs font-semibold text-zinc-800 mb-1">
+              Nombre de la categoría *
             </label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Decoración Oriental"
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-zinc-900 focus:border-zinc-900 focus:outline-none"
+              placeholder="Ej: Bazar Oriental, Decoración..."
+              className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs text-zinc-900 focus:border-zinc-900 focus:outline-none"
             />
-            {name.trim() && (
-              <p className="mt-1 font-mono text-[11px] text-zinc-500">
-                Slug: /{slugify(name)}
-              </p>
-            )}
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-800 mb-1">
-              Categoría Padre (Opcional)
+            <label className="block text-xs font-semibold text-zinc-800 mb-1">
+              ¿Es subcategoría de otra? <span className="font-normal text-zinc-400">(Opcional)</span>
             </label>
             <select
               value={parentId}
               onChange={(e) => setParentId(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-zinc-900 focus:border-zinc-900 focus:outline-none"
+              className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs text-zinc-900 focus:border-zinc-900 focus:outline-none"
             >
-              <option value="">— Categoría Principal —</option>
+              <option value="">— No, es una categoría principal —</option>
               {existingCategories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -142,16 +140,16 @@ export function QuickCategoryModal({
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
+              className="flex-1 sm:flex-none rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded-lg bg-zinc-900 px-3.5 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="flex-1 sm:flex-none rounded-xl bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 transition shadow-sm"
             >
-              {isSaving ? 'Creando...' : 'Crear y Seleccionar'}
+              {isSaving ? 'Creando...' : 'Crear y Asignar'}
             </button>
           </div>
         </form>

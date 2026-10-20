@@ -182,20 +182,20 @@ export function StockMovementForm({
   }
 
   return (
-    <section className="rounded-lg border border-zinc-200/80 bg-white p-5">
+    <section className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-sm">
       <div className="mb-4">
-        <h2 className="text-sm font-semibold text-zinc-900">
+        <h2 className="text-sm sm:text-base font-bold text-zinc-900">
           Registrar Movimiento de Stock
         </h2>
-        <p className="text-xs text-zinc-500">
-          Toda operación se ejecuta mediante transacción auditable (`register_stock_movement`).
+        <p className="text-xs text-zinc-500 mt-0.5">
+          Registrá ingresos de compras, ventas o ajustes para mantener tu stock siempre actualizado.
         </p>
       </div>
 
       {errorMessage && (
         <div
           role="alert"
-          className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+          className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
         >
           {errorMessage}
         </div>

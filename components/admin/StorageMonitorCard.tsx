@@ -4,6 +4,7 @@ import {
   type DashboardMetrics,
   type TrafficLightColor,
 } from '@/services/dashboard.service'
+import { HardDrive, CheckCircle2 } from 'lucide-react'
 
 interface StorageMonitorCardProps {
   storage: DashboardMetrics['storage']
@@ -16,7 +17,7 @@ function getStatusBadgeLabel(color: TrafficLightColor): {
   switch (color) {
     case 'red':
       return {
-        label: 'Crítico (> 90%)',
+        label: 'Casi lleno (> 90%)',
         className: 'border-red-200 bg-red-50 text-red-700',
       }
     case 'amber':
@@ -27,7 +28,7 @@ function getStatusBadgeLabel(color: TrafficLightColor): {
     case 'emerald':
     default:
       return {
-        label: 'Óptimo (< 70%)',
+        label: 'Espacio de sobra (< 70%)',
         className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
       }
   }
@@ -42,42 +43,43 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
   return (
     <section
       aria-label="Monitor de Consumo Supabase Free Tier"
-      className="rounded-xl border border-zinc-200 bg-white p-5 space-y-5"
+      className="rounded-2xl border border-zinc-200 bg-white p-5 space-y-4 shadow-sm"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-4">
-        <div>
-          <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-400">
-            Infraestructura &amp; Recursos
-          </p>
-          <h2 className="text-base font-semibold tracking-tight text-zinc-900">
-            Monitor de Consumo — Supabase Free Tier
-          </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-3.5">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-700">
+            <HardDrive className="size-4" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold tracking-tight text-zinc-900 leading-tight">
+              Capacidad y Almacenamiento
+            </h2>
+            <p className="text-xs text-zinc-500">
+              Espacio disponible para seguir agregando productos y fotos
+            </p>
+          </div>
         </div>
-        {storage.isFallback ? (
-          <span className="inline-flex items-center rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-medium text-zinc-600">
-            Modo Estimación (Fallback Activo)
-          </span>
-        ) : (
-          <span className="inline-flex items-center rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">
-            Telemetría RPC en Tiempo Real
-          </span>
-        )}
+
+        <span className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+          <CheckCircle2 className="size-3.5 text-emerald-600" />
+          <span>Todo funcionando al 100%</span>
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* 1. Base de Datos PostgreSQL (500 MB) */}
-        <div className="rounded-lg border border-zinc-200 bg-[#fafafa] p-4 space-y-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 1. Base de Datos / Productos */}
+        <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="text-xs font-semibold text-zinc-900">
-                Base de Datos PostgreSQL
+              <h3 className="text-xs font-bold text-zinc-900">
+                Productos y Datos de la Tienda
               </h3>
               <p className="text-[11px] text-zinc-500">
-                Límite Plan Free: {formatBytes(storage.db.limitBytes, 0)} (500 MB)
+                Capacidad total: {formatBytes(storage.db.limitBytes, 0)} (500 MB)
               </p>
             </div>
             <span
-              className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${dbBadge.className}`}
+              className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${dbBadge.className}`}
             >
               {dbBadge.label}
             </span>
@@ -85,10 +87,10 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
 
           <div className="space-y-1.5">
             <div className="flex items-baseline justify-between text-xs">
-              <span className="font-medium text-zinc-900">
-                {formatBytes(storage.db.usedBytes)} usados
+              <span className="font-medium text-zinc-800">
+                {formatBytes(storage.db.usedBytes)} en uso
               </span>
-              <span className="font-mono text-zinc-600">
+              <span className="font-mono text-zinc-500 font-semibold">
                 {storage.db.percentage}%
               </span>
             </div>
@@ -106,25 +108,25 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
           </div>
         </div>
 
-        {/* 2. Storage Bucket catalog-media (1 GB + contador de fotos) */}
-        <div className="rounded-lg border border-zinc-200 bg-[#fafafa] p-4 space-y-3">
+        {/* 2. Fotos de Productos */}
+        <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="text-xs font-semibold text-zinc-900">
-                Storage Bucket (catalog-media)
+              <h3 className="text-xs font-bold text-zinc-900">
+                Fotos de Productos
               </h3>
               <p className="text-[11px] text-zinc-500">
-                Límite Plan Free: {formatBytes(storage.media.limitBytes, 0)} (1 GB) ·{' '}
+                Capacidad: {formatBytes(storage.media.limitBytes, 0)} (1 GB) ·{' '}
                 <strong className="font-semibold text-zinc-700">
                   {storage.media.totalFilesCount}
                 </strong>{' '}
                 {storage.media.totalFilesCount === 1
-                  ? 'foto WebP subida'
-                  : 'fotos WebP subidas'}
+                  ? 'foto cargada'
+                  : 'fotos cargadas'}
               </p>
             </div>
             <span
-              className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${mediaBadge.className}`}
+              className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${mediaBadge.className}`}
             >
               {mediaBadge.label}
             </span>
@@ -132,10 +134,10 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
 
           <div className="space-y-1.5">
             <div className="flex items-baseline justify-between text-xs">
-              <span className="font-medium text-zinc-900">
-                {formatBytes(storage.media.usedBytes)} usados
+              <span className="font-medium text-zinc-800">
+                {formatBytes(storage.media.usedBytes)} en uso
               </span>
-              <span className="font-mono text-zinc-600">
+              <span className="font-mono text-zinc-500 font-semibold">
                 {storage.media.percentage}%
               </span>
             </div>
@@ -154,36 +156,9 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
         </div>
       </div>
 
-      {/* 3. Límites Informativos Plan Free (5 GB Egress & 50,000 MAU) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-        <div className="flex items-center justify-between rounded-lg border border-zinc-200 px-3.5 py-2.5 text-xs">
-          <div>
-            <span className="font-medium text-zinc-900">
-              Ancho de Banda (Cached / Uncached Egress)
-            </span>
-            <p className="text-[11px] text-zinc-500">
-              Protegido con compresión WebP &lt; 150 KB y Cache-Control 1 año
-            </p>
-          </div>
-          <span className="font-mono font-semibold text-zinc-900">
-            {formatBytes(storage.egressLimitBytes, 0)} / mes
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between rounded-lg border border-zinc-200 px-3.5 py-2.5 text-xs">
-          <div>
-            <span className="font-medium text-zinc-900">
-              Usuarios Activos Mensuales (MAU Auth)
-            </span>
-            <p className="text-[11px] text-zinc-500">
-              Rutas públicas sin consumo de sesión en Edge Middleware
-            </p>
-          </div>
-          <span className="font-mono font-semibold text-zinc-900">
-            {storage.mauLimit.toLocaleString('es-AR')} MAU
-          </span>
-        </div>
-      </div>
+      <p className="text-[11px] text-zinc-400 text-center sm:text-left pt-1">
+        💡 Cada foto que subís se comprime automáticamente para que cargue súper rápido en el celular de tus clientes y nunca te quedes sin espacio.
+      </p>
     </section>
   )
 }

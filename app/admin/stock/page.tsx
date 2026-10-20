@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getStockAdminPageDataService } from '@/services/stock.service'
 import { StockMovementForm } from '@/components/admin/StockMovementForm'
 import { StockHistoryTable } from '@/components/admin/StockHistoryTable'
+import { Package } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,25 +17,26 @@ export default async function AdminStockPage({
   const { variants, movements } = await getStockAdminPageDataService()
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">
-            Inventario &amp; Trazabilidad
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+            Inventario de Mercadería
           </p>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
-            Auditoría y Movimientos de Stock
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 mt-0.5">
+            Control y Movimientos de Stock
           </h1>
-          <p className="text-xs text-zinc-500">
-            Registrá ingresos, salidas o ajustes de conteo físico con historial auditable.
+          <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+            Cargá ingresos de nueva mercadería, retiros o ajustes para mantener tu inventario exacto.
           </p>
         </div>
 
         <Link
           href="/admin/productos"
-          className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition"
+          className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition shadow-2xs"
         >
-          Ir a Productos y Variantes
+          <Package className="size-3.5 text-zinc-500" />
+          <span>Ver Productos</span>
         </Link>
       </div>
 

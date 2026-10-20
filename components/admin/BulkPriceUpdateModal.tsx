@@ -131,16 +131,16 @@ export function BulkPriceUpdateModal({
       role="dialog"
       aria-modal="true"
       aria-label="Actualización masiva de precios por porcentaje"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/40 p-4 backdrop-blur-[1px]"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-zinc-950/40 p-0 sm:p-4 backdrop-blur-[2px]"
     >
-      <div className="w-full max-w-lg rounded-xl border border-zinc-200 bg-white shadow-xl overflow-hidden">
-        <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-4">
+      <div className="w-full max-w-lg rounded-t-2xl sm:rounded-2xl border border-zinc-200 bg-white shadow-2xl overflow-hidden max-h-[92vh] sm:max-h-[85vh] flex flex-col">
+        <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-4 bg-zinc-50/50">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-400">
-              Herramienta Masiva ({selectedProducts.length} seleccionados)
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400">
+              Modificación Rápida ({selectedProducts.length} seleccionados)
             </p>
-            <h2 className="text-base font-semibold text-zinc-900">
-              Actualización de Precios por Porcentaje (%)
+            <h2 className="text-base font-bold text-zinc-900">
+              Ajustar Precios por Porcentaje (%)
             </h2>
           </div>
           <button
@@ -244,23 +244,23 @@ export function BulkPriceUpdateModal({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2 border-t border-zinc-200 pt-4">
+          <div className="flex items-center justify-end gap-2.5 border-t border-zinc-200 pt-4">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
+              className="flex-1 sm:flex-none rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting || !isValidPct}
-              className="rounded-lg bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="flex-1 sm:flex-none rounded-xl bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 transition shadow-sm"
             >
               {isSubmitting
                 ? 'Actualizando precios...'
-                : `Aplicar Ajuste a ${selectedProducts.length} Productos`}
+                : `Aplicar a ${selectedProducts.length} Productos`}
             </button>
           </div>
         </form>

@@ -18,16 +18,16 @@ export default async function AdminProductsPage({
   ])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div>
-        <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-400">
-          Catálogo e Inventario
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400">
+          Catálogo de Productos
         </p>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-          Productos, Variantes &amp; Galería WebP
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 mt-0.5">
+          Productos y Precios
         </h1>
-        <p className="text-xs text-zinc-500 mt-1">
-          Administrá el catálogo completo, variantes con precios diferenciales, galería ordenable y ajustes masivos de precios por porcentaje.
+        <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+          Cargá tus productos, fotos, precios y variantes. Podés cambiar precios rápidamente desde acá.
         </p>
       </div>
 
