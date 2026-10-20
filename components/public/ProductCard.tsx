@@ -88,15 +88,15 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/producto/${product.slug}`}
       className="group flex flex-col justify-between bg-transparent transition-all"
     >
-      {/* Contenedor de Imagen Cuadrado con Fondo Gris Suave Kith (#f0f0f0 / #ececec) */}
-      <div className="relative aspect-square w-full bg-[#f0f0f0] overflow-hidden flex items-center justify-center select-none">
+      {/* Contenedor de Imagen Cuadrado que se acomoda completamente a la imagen */}
+      <div className="relative aspect-square w-full overflow-hidden select-none bg-transparent">
         {primaryImageUrl ? (
           <>
             <Image
               src={primaryImageUrl}
               alt={product.name}
               fill
-              className={`object-contain p-3 sm:p-5 transition-all duration-700 ease-out ${
+              className={`object-cover transition-transform duration-700 ease-out ${
                 secondaryImageUrl
                   ? 'group-hover:opacity-0'
                   : 'group-hover:scale-105'
@@ -108,13 +108,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 src={secondaryImageUrl}
                 alt={`${product.name} foto secundaria`}
                 fill
-                className="object-contain p-3 sm:p-5 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                className="object-cover opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
               />
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full text-zinc-300">
+          <div className="flex items-center justify-center h-full text-zinc-300 bg-neutral-100">
             <Package className="size-10 stroke-[1.2]" />
           </div>
         )}
