@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { formatCurrencyARS } from '@/utils/formatters'
 import type { DashboardMetrics } from '@/services/dashboard.service'
-import { PackageCheck, Coins, AlertTriangle, ArrowRight } from 'lucide-react'
+import { PackageCheck, AlertTriangle, ArrowRight } from 'lucide-react'
 
 interface InventoryKpisProps {
   kpis: DashboardMetrics['kpis']
@@ -11,7 +10,7 @@ export function InventoryKpis({ kpis }: InventoryKpisProps) {
   return (
     <section
       aria-label="Indicadores Clave de Inventario"
-      className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4"
+      className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4"
     >
       {/* 1. Productos Activos */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-5 flex flex-col justify-between shadow-sm hover:border-zinc-300 transition">
@@ -37,35 +36,6 @@ export function InventoryKpis({ kpis }: InventoryKpisProps) {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-800 hover:text-zinc-950 transition"
           >
             <span>Ver todos los productos</span>
-            <ArrowRight className="size-3 text-zinc-400" />
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. Valorización de Stock */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-5 flex flex-col justify-between shadow-sm hover:border-zinc-300 transition">
-        <div>
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-              Valor de Mercadería
-            </span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-700">
-              <Coins className="size-4" />
-            </div>
-          </div>
-          <p className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
-            {formatCurrencyARS(kpis.totalStockValuation)}
-          </p>
-          <p className="mt-1 text-xs text-zinc-500">
-            Estimado de mercadería disponible por precio actual
-          </p>
-        </div>
-        <div className="mt-4 pt-3 border-t border-zinc-100">
-          <Link
-            href="/admin/stock"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-800 hover:text-zinc-950 transition"
-          >
-            <span>Controlar inventario</span>
             <ArrowRight className="size-3 text-zinc-400" />
           </Link>
         </div>
