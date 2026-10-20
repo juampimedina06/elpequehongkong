@@ -118,6 +118,8 @@ export async function uploadCatalogImage(
   }
 }
 
+export const uploadCatalogFileClient = uploadCatalogImage
+
 /**
  * Physically deletes one or multiple files from `catalog-media` by `storage_path`.
  */

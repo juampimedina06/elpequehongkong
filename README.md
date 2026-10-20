@@ -23,16 +23,24 @@ El proyecto sigue una arquitectura en capas desacoplada para garantizar escalabi
 elpequehongkong/
 ├── actions/             # Next.js Server Actions (mutaciones, revalidaciones de caché)
 │   ├── auth/            # Acciones de inicio/cierre de sesión
+│   ├── banners/         # Mutaciones y reordenamiento de banners
 │   ├── categories/      # Acciones para gestión de categorías
-│   └── products/        # Acciones para catálogo de productos y precios
+│   ├── products/        # Acciones para catálogo de productos y precios
+│   └── stock/           # Registro auditable de movimientos de stock
 ├── app/                 # Rutas de Next.js App Router
-│   ├── (public)/        # Catálogo público y vitrina
-│   ├── admin/           # Panel de administración protegido (/admin, /admin/categorias, /admin/productos)
+│   ├── (public)/        # Catálogo público, vitrina y ficha de producto
+│   ├── admin/           # Panel de administración protegido
+│   │   ├── categorias/  # CRUD jerárquico de categorías
+│   │   ├── portada/     # Gestor de banners y hero
+│   │   ├── productos/   # Catálogo, variantes y actualización masiva
+│   │   └── stock/       # Auditoría y ajuste de inventario
+│   ├── catalogo/        # Catálogo público con filtros sincronizados en URL
 │   ├── login/           # Pantalla de acceso de administración
 │   └── layout.tsx       # Layout raíz
 ├── components/          # Componentes de interfaz clasificados por contexto
 │   ├── admin/           # Tablas, métricas, modales de gestión y monitores
 │   ├── auth/            # Formularios y guards de autenticación
+│   ├── public/          # Filtros de catálogo, cards, galería y selectores
 │   └── ui/              # Primitivas de UI accesibles
 ├── lib/                 # Clientes base y utilidades centrales
 │   ├── supabase/        # Clientes Supabase (Browser, Server, Middleware, Admin Service Role)
@@ -82,6 +90,18 @@ elpequehongkong/
 - Galería WebP interactiva con selección de imagen principal y ordenamiento.
 - Creación rápida de categoría inline dentro del modal de producto sin perder el progreso.
 
+### 6. Módulo de Auditoría y Movimientos de Stock
+- Registro de movimientos de stock clasificados: Entrada (`IN`), Salida (`OUT`) y Ajuste (`ADJUSTMENT`).
+- Ejecución atómica mediante RPC PostgreSQL `register_stock_movement` con fallback transaccional.
+- Previsualización en vivo del stock resultante y guard contra stock negativo (`stock_quantity < 0`).
+- Historial cronológico inmutable con filtros por tipo de movimiento, búsqueda por SKU/nombre y cálculo de balances.
+
+### 7. Gestor de Portada y Home Pública 100% Dinámica
+- Panel administrativo `/admin/portada` para gestionar banners promocionales con títulos, subtítulos, texto de botón CTA y enlaces internos/externos.
+- Subida de imágenes de portada optimizadas a `catalog-media/banners` con limpieza automática de archivos anteriores.
+- Activación/desactivación instantánea (`is_active`) y control de visualización (`display_order`).
+- Home pública (`/`) dinámica: vitrina de banners activos, categorías principales, recién llegados y productos destacados.
+
 ---
 
 ## 🛠️ Instalación y Configuración Local
@@ -128,7 +148,7 @@ Ejecuta la migración inicial de Supabase ubicada en `supabase/migrations/` en e
 El proyecto cuenta con una suite completa de pruebas unitarias y de integración que validan los servicios, seguridad y dominio:
 
 ```bash
-# Ejecutar suite de tests
+# Ejecutar suite de tests (64 tests unitarios y de integración)
 npm test
 
 # Verificación de tipos TypeScript estricta
@@ -143,7 +163,7 @@ npm run dev
 
 ---
 
-## 🗺️ Roadmap de Próximos Pasos
+## 🗺️ Roadmap del Proyecto
 
 - [x] **TICKET-01**: Base arquitectónica, clientes de Supabase y esquema SQL.
 - [x] **TICKET-02**: Autenticación de Administrador y rutas protegidas.
@@ -151,6 +171,6 @@ npm run dev
 - [x] **TICKET-04**: Monitor de recursos Free Tier y dashboard de KPIs.
 - [x] **TICKET-05**: CRUD de categorías y subcategorías.
 - [x] **TICKET-06**: CRUD de productos, variantes y galería WebP.
-- [ ] **TICKET-07**: Módulo de auditoría y movimientos de stock.
-- [ ] **TICKET-08**: Portada dinámica y gestión de banners promocionales.
-- [ ] **TICKET-09**: Catálogo público con filtros URL y consultas directas a WhatsApp.
+- [x] **TICKET-07**: Módulo de auditoría y movimientos de stock.
+- [x] **TICKET-08**: Portada dinámica y gestión de banners promocionales.
+- [x] **TICKET-09**: Catálogo público con filtros URL, badges dinámicos y ficha de producto (SEO).

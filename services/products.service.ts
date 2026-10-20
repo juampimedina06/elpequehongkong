@@ -5,6 +5,7 @@ import {
   fetchProductsPricingByIds,
   getActiveProductBySlugWithRelations,
   getProductByIdWithRelations,
+  listActiveProductsWithRelations,
   listAdminProductsWithRelations,
   persistProductAggregateInDb,
   updateProductPriceFieldsRow,
@@ -537,3 +538,101 @@ export async function deleteProductService(
     deletedStoragePaths: storagePaths,
   }
 }
+
+export interface PublicCatalogFilterOptions {
+  q?: string
+  categoria?: string
+  subcategoria?: string
+  minPrice?: number
+  maxPrice?: number
+  orden?: 'recientes' | 'precio_asc' | 'precio_desc' | string
+  enStock?: boolean
+}
+
+/**
+ * Pure filter and sort function for public catalog items.
+ */
+export function filterAndSortPublicCatalog(
+  products: ProductWithRelations[],
+  filters: PublicCatalogFilterOptions
+): ProductWithRelations[] {
+  const query = (filters.q ?? '').trim().toLowerCase()
+  const catSlug = (filters.categoria ?? '').trim().toLowerCase()
+  const subcatSlug = (filters.subcategoria ?? '').trim().toLowerCase()
+  const minPrice =
+    typeof filters.minPrice === 'number' && !Number.isNaN(filters.minPrice)
+      ? filters.minPrice
+      : undefined
+  const maxPrice =
+    typeof filters.maxPrice === 'number' && !Number.isNaN(filters.maxPrice)
+      ? filters.maxPrice
+      : undefined
+  const enStockOnly = Boolean(filters.enStock)
+
+  const filtered = products.filter((p) => {
+    // 1. Query search
+    if (query) {
+      const matchName = p.name.toLowerCase().includes(query)
+      const matchDesc = p.description?.toLowerCase().includes(query) ?? false
+      const matchSku =
+        p.variants?.some((v) => v.sku?.toLowerCase().includes(query)) ?? false
+      const matchCategory = p.category?.name.toLowerCase().includes(query) ?? false
+      if (!matchName && !matchDesc && !matchSku && !matchCategory) {
+        return false
+      }
+    }
+
+    // 2. Category / Subcategory
+    if (subcatSlug) {
+      if (p.category?.slug.toLowerCase() !== subcatSlug) return false
+    } else if (catSlug) {
+      const matchesCat = p.category?.slug.toLowerCase() === catSlug
+      if (!matchesCat) return false
+    }
+
+    // 3. Price filter
+    if (minPrice !== undefined && p.base_price < minPrice) {
+      return false
+    }
+    if (maxPrice !== undefined && p.base_price > maxPrice) {
+      return false
+    }
+
+    // 4. Stock filter
+    if (enStockOnly) {
+      const totalStock = (p.variants ?? []).reduce(
+        (sum, v) => sum + Math.max(0, Number(v.stock_quantity ?? 0)),
+        0
+      )
+      if (totalStock <= 0) {
+        return false
+      }
+    }
+
+    return true
+  })
+
+  // 5. Sorting
+  const orden = filters.orden ?? 'recientes'
+  return filtered.sort((a, b) => {
+    if (orden === 'precio_asc') {
+      return a.base_price - b.base_price
+    }
+    if (orden === 'precio_desc') {
+      return b.base_price - a.base_price
+    }
+    // Default: 'recientes'
+    return b.created_at.localeCompare(a.created_at)
+  })
+}
+
+/**
+ * Service to retrieve active public catalog products with relations.
+ */
+export async function getPublicCatalogService(deps?: {
+  fetchActiveProducts?: () => Promise<ProductWithRelations[]>
+}): Promise<ProductWithRelations[]> {
+  const fetchFn = deps?.fetchActiveProducts ?? listActiveProductsWithRelations
+  return fetchFn()
+}
+

@@ -131,6 +131,22 @@ export async function listAdminProductsWithRelations(): Promise<
   )
 }
 
+export async function listActiveProductsWithRelations(): Promise<
+  ProductWithRelations[]
+> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('products')
+    .select(PRODUCT_RELATION_SELECT)
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+
+  if (error || !data) return []
+  return (data as unknown as Array<Record<string, unknown>>).map(
+    mapRawProductWithRelations
+  )
+}
+
 export async function getProductByIdWithRelations(
   id: string
 ): Promise<ProductWithRelations | null> {
