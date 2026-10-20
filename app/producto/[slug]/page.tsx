@@ -69,7 +69,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     <div className="min-h-screen flex flex-col bg-white text-zinc-900 selection:bg-black selection:text-white">
       <PublicNavbar />
 
-      <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <main className="flex-1 mx-auto max-w-[1760px] w-full px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
         <ProductDetailView product={product} />
       </main>
 

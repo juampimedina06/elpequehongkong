@@ -4,7 +4,7 @@ import { MessageCircle, Shield } from 'lucide-react'
 export function PublicFooter() {
   return (
     <footer className="border-t border-black bg-black text-white py-14 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="mx-auto max-w-[1760px] px-4 sm:px-8 lg:px-12 space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12">
           {/* Columna de Marca */}
           <div className="md:col-span-6 space-y-3">

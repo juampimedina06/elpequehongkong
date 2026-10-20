@@ -53,7 +53,7 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
     <div className="min-h-screen flex flex-col bg-white text-zinc-900 selection:bg-black selection:text-white">
       <PublicNavbar />
 
-      <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
+      <main className="flex-1 mx-auto max-w-[1760px] w-full px-4 sm:px-8 lg:px-12 py-10 sm:py-14 space-y-10">
         {/* Encabezado Editorial */}
         <div className="border-b border-black pb-4 space-y-1">
           <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400">
@@ -75,7 +75,7 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
 
         {/* Grilla Editorial de Productos */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-12">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

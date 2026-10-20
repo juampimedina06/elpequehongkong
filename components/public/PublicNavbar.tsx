@@ -18,7 +18,7 @@ export function PublicNavbar() {
 
       {/* Header Editorial Fijo */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-zinc-200/80 transition-all">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[1760px] items-center justify-between px-4 sm:px-8 lg:px-12">
           {/* Botón Menú Mobile */}
           <button
             type="button"

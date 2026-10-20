@@ -45,7 +45,7 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
       )}
 
       {/* Contenido Editorial Kith */}
-      <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 z-10 space-y-4">
+      <div className="relative w-full max-w-[1760px] mx-auto px-6 sm:px-10 lg:px-16 pb-12 sm:pb-16 z-10 space-y-4">
         <div className="flex items-center gap-3">
           <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-300">
             Colección {new Date().getFullYear()} / Editorial

@@ -37,8 +37,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Contenido Principal con Espaciado Editorial */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 space-y-20 sm:space-y-28">
+      {/* Contenido Principal con Espaciado Editorial Amplio */}
+      <main className="flex-1 w-full max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-16 space-y-16 sm:space-y-24">
         {/* Sección 01: Recién Llegados */}
         {newArrivals.length > 0 && (
           <section id="novedades" className="space-y-6">
@@ -60,7 +60,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
               {newArrivals.map((prod) => (
                 <ProductCard key={prod.id} product={prod} />
               ))}
@@ -92,7 +92,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
               {showcaseProducts.map((prod) => (
                 <ProductCard key={prod.id} product={prod} />
               ))}

@@ -101,7 +101,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   ? 'group-hover:opacity-0'
                   : 'group-hover:scale-105'
               }`}
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
             />
             {secondaryImageUrl && (
               <Image
@@ -109,7 +109,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 alt={`${product.name} foto secundaria`}
                 fill
                 className="object-cover opacity-0 group-hover:opacity-100 group-hover:scale-103 transition-all duration-700 ease-out"
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
               />
             )}
           </>
