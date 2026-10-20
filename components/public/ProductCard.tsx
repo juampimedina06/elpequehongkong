@@ -17,6 +17,7 @@ function isProductWithRelations(
 
 export function ProductCard({ product }: ProductCardProps) {
   let primaryImageUrl: string | null = null
+  let secondaryImageUrl: string | null = null
   let totalStock = 0
   let minStockAlert = 3
   let categoryName: string | null = null
@@ -27,6 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
       return (a.display_order ?? 0) - (b.display_order ?? 0)
     })
     primaryImageUrl = sortedImages[0]?.url ?? null
+    secondaryImageUrl = sortedImages[1]?.url ?? null
 
     const activeVariants = (product.variants ?? []).filter(
       (v) => v.is_active !== false
@@ -58,7 +60,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const discountBadge = badges.find((b) => b.type === 'discount')
   const newBadge = badges.find((b) => b.type === 'new')
-  const featuredBadge = badges.find((b) => b.type === 'featured')
   const stockBadge = badges.find(
     (b) => b.type === 'out_of_stock' || b.type === 'low_stock'
   )
@@ -71,83 +72,80 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/producto/${product.slug}`}
-      className="group flex flex-col justify-between rounded-xl border border-zinc-200/80 bg-white hover:border-zinc-300 hover:shadow-xs transition overflow-hidden"
+      className="group flex flex-col justify-between bg-transparent transition-all"
     >
-      <div className="relative aspect-square w-full bg-zinc-50 overflow-hidden">
+      {/* Contenedor de Imagen con Proporción Editorial 3:4 */}
+      <div className="relative aspect-[3/4] w-full bg-[#f5f5f5] overflow-hidden">
         {primaryImageUrl ? (
-          <Image
-            src={primaryImageUrl}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-102 transition duration-300"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
+          <>
+            <Image
+              src={primaryImageUrl}
+              alt={product.name}
+              fill
+              className={`object-cover transition-all duration-700 ease-out ${
+                secondaryImageUrl
+                  ? 'group-hover:opacity-0'
+                  : 'group-hover:scale-105'
+              }`}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            />
+            {secondaryImageUrl && (
+              <Image
+                src={secondaryImageUrl}
+                alt={`${product.name} foto secundaria`}
+                fill
+                className="object-cover opacity-0 group-hover:opacity-100 group-hover:scale-103 transition-all duration-700 ease-out"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+            )}
+          </>
         ) : (
           <div className="flex items-center justify-center h-full text-zinc-300">
-            <Package className="size-10" />
+            <Package className="size-10 stroke-[1.2]" />
           </div>
         )}
 
-        {/* Top Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
+        {/* Badges Minimalistas Kith (Esquina Superior Izquierda) */}
+        <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10">
           {discountBadge && (
-            <span
-              className={`px-1.5 py-0.5 text-[10px] rounded-md ${discountBadge.className}`}
-            >
+            <span className="bg-black text-white text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
               {discountBadge.label}
             </span>
           )}
-          {newBadge && (
-            <span
-              className={`px-1.5 py-0.5 text-[10px] rounded-md ${newBadge.className}`}
-            >
-              {newBadge.label}
+          {newBadge && !discountBadge && (
+            <span className="bg-white text-black border border-black/20 text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
+              Nuevo
             </span>
           )}
-          {featuredBadge && (
-            <span
-              className={`px-1.5 py-0.5 text-[10px] rounded-md ${featuredBadge.className}`}
-            >
-              {featuredBadge.label}
-            </span>
-          )}
-        </div>
-
-        {/* Bottom Stock Badge */}
-        {stockBadge && (
-          <div className="absolute bottom-2 right-2">
-            <span
-              className={`px-1.5 py-0.5 text-[10px] rounded-md ${stockBadge.className}`}
-            >
+          {stockBadge && (
+            <span className="bg-zinc-900/90 backdrop-blur-xs text-white text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
               {stockBadge.label}
             </span>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-      <div className="p-3.5 space-y-1.5 flex-1 flex flex-col justify-between">
-        <div>
-          {categoryName && (
-            <span className="text-[10px] uppercase font-semibold tracking-wider text-zinc-400 block mb-0.5">
-              {categoryName}
+      {/* Información del Producto Tipografía Kith */}
+      <div className="pt-3 pb-1 space-y-1">
+        {categoryName && (
+          <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400 block">
+            {categoryName}
+          </span>
+        )}
+
+        <h3 className="font-semibold text-xs sm:text-sm text-zinc-900 tracking-tight leading-snug line-clamp-1 group-hover:underline underline-offset-4 decoration-zinc-900/60">
+          {product.name}
+        </h3>
+
+        <div className="pt-1 flex items-baseline gap-2">
+          <span className="text-xs sm:text-sm font-bold text-zinc-900 tracking-tight">
+            {formatCurrency(product.base_price)}
+          </span>
+          {hasDiscount && (
+            <span className="text-[11px] text-zinc-400 line-through font-normal">
+              {formatCurrency(product.compare_at_price)}
             </span>
           )}
-          <h3 className="font-semibold text-xs text-zinc-900 line-clamp-2 leading-snug group-hover:text-zinc-700 transition">
-            {product.name}
-          </h3>
-        </div>
-
-        <div className="pt-2">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-sm font-bold text-zinc-900">
-              {formatCurrency(product.base_price)}
-            </span>
-            {hasDiscount && (
-              <span className="text-[11px] text-zinc-400 line-through">
-                {formatCurrency(product.compare_at_price)}
-              </span>
-            )}
-          </div>
         </div>
       </div>
     </Link>

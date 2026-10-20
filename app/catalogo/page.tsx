@@ -50,43 +50,43 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
     : null
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafafa] text-zinc-900">
+    <div className="min-h-screen flex flex-col bg-white text-zinc-900 selection:bg-black selection:text-white">
       <PublicNavbar />
 
-      <main className="flex-1 mx-auto max-w-6xl w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Header & Title */}
-        <div className="space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
-            {selectedCategoryName ? `Catálogo / ${selectedCategoryName}` : 'Catálogo Completo'}
+      <main className="flex-1 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
+        {/* Encabezado Editorial */}
+        <div className="border-b border-black pb-4 space-y-1">
+          <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400">
+            {selectedCategoryName ? `Colección / ${selectedCategoryName}` : 'Catálogo Completo'}
           </p>
           <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950">
               {selectedCategoryName || 'Todos los Productos'}
             </h1>
-            <span className="text-xs text-zinc-500 font-medium">
+            <span className="text-xs font-mono tracking-wider text-zinc-500 uppercase">
               {filteredProducts.length}{' '}
-              {filteredProducts.length === 1 ? 'producto encontrado' : 'productos encontrados'}
+              {filteredProducts.length === 1 ? 'artículo' : 'artículos'}
             </span>
           </div>
         </div>
 
-        {/* Filter Controls */}
+        {/* Controles de Filtros */}
         <CatalogFilters categories={categories} />
 
-        {/* Products Grid or Empty State */}
+        {/* Grilla Editorial de Productos */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-12">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-zinc-200 bg-white p-12 text-center space-y-3">
+          <div className="border border-zinc-200 bg-[#fafafa] p-12 sm:p-16 text-center space-y-3">
             <div className="size-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-zinc-400">
               <PackageOpen className="size-6" />
             </div>
-            <h3 className="text-sm font-semibold text-zinc-900">
-              No encontramos productos que coincidan
+            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900">
+              No se encontraron productos
             </h3>
             <p className="text-xs text-zinc-500 max-w-sm mx-auto">
               Probá ajustando el término de búsqueda, desmarcando el filtro de stock o seleccionando otra categoría.

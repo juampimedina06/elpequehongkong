@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { HeroSlideDescriptor } from '@/services/banners.service'
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react'
 
 interface HeroCarouselProps {
   slides: HeroSlideDescriptor[]
@@ -17,7 +17,7 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
     if (slides.length <= 1) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length)
-    }, 5500)
+    }, 6000)
     return () => clearInterval(timer)
   }, [slides.length])
 
@@ -26,8 +26,8 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
   const current = slides[currentIndex]
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl bg-zinc-950 aspect-[21/9] sm:aspect-[2.4/1] min-h-[260px] text-white shadow-sm border border-zinc-900/10">
-      {/* Background Image / Overlay */}
+    <section className="relative w-full overflow-hidden bg-black text-white aspect-[4/3] sm:aspect-[16/7] md:aspect-[21/9] min-h-[440px] sm:min-h-[540px] flex items-end">
+      {/* Background Image / Overlay Cinematográfico */}
       {current.image_url ? (
         <div className="absolute inset-0">
           <Image
@@ -36,74 +36,76 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
             fill
             priority={current.isPriority}
             sizes="100vw"
-            className="object-cover opacity-60 transition-opacity duration-700"
+            className="object-cover opacity-75 transition-transform duration-1000 scale-100 hover:scale-102"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/20" />
         </div>
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-black to-black" />
       )}
 
-      {/* Content */}
-      <div className="relative h-full flex flex-col justify-end p-6 sm:p-10 max-w-2xl space-y-3 z-10">
-        <span className="text-[10px] font-semibold tracking-widest uppercase px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-xs w-fit">
-          Destacado
-        </span>
-        <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+      {/* Contenido Editorial Kith */}
+      <div className="relative w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 z-10 space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] uppercase text-zinc-300">
+            Colección {new Date().getFullYear()} / Editorial
+          </span>
+          <span className="h-px w-10 bg-zinc-400/60" />
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-[0.95] max-w-3xl">
           {current.title}
         </h1>
+
         {current.subtitle && (
-          <p className="text-xs sm:text-sm text-zinc-300 line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-zinc-300 tracking-wide font-normal max-w-xl leading-relaxed">
             {current.subtitle}
           </p>
         )}
-        <div className="pt-2">
+
+        <div className="pt-3 flex items-center gap-4">
           <Link
             href={current.link_url}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg bg-white text-zinc-950 hover:bg-zinc-100 transition shadow-xs"
+            className="group inline-flex items-center gap-2.5 border border-white bg-black/40 hover:bg-white hover:text-black text-white px-7 py-3 text-xs uppercase font-extrabold tracking-[0.25em] backdrop-blur-md transition-all duration-300 shadow-xl"
           >
-            <span>{current.cta_text}</span>
-            <ArrowRight className="size-3.5" />
+            <span>{current.cta_text || 'Explorar Colección'}</span>
+            <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
       </div>
 
-      {/* Nav Controls */}
+      {/* Controles de Navegación Editorial */}
       {slides.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={() => setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 size-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-xs transition"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="size-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setCurrentIndex((prev) => (prev + 1) % slides.length)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 size-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-xs transition"
-            aria-label="Siguiente"
-          >
-            <ChevronRight className="size-4" />
-          </button>
+          <div className="absolute right-6 sm:right-12 bottom-6 sm:bottom-12 flex items-center gap-3 z-20">
+            {/* Contador numérico de slides estilo revista */}
+            <span className="font-mono text-[11px] font-bold tracking-widest text-zinc-400 mr-2">
+              0{currentIndex + 1} / 0{slides.length}
+            </span>
 
-          {/* Dots */}
-          <div className="absolute bottom-3 right-6 flex gap-1.5 z-10">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setCurrentIndex(i)}
-                className={`size-2 rounded-full transition-all ${
-                  currentIndex === i ? 'bg-white w-5' : 'bg-white/40 hover:bg-white/70'
-                }`}
-                aria-label={`Ir a slide ${i + 1}`}
-              />
-            ))}
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length)
+              }
+              className="size-9 rounded-full border border-white/30 bg-black/40 hover:bg-white hover:text-black text-white flex items-center justify-center backdrop-blur-md transition-all"
+              aria-label="Slide anterior"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentIndex((prev) => (prev + 1) % slides.length)
+              }
+              className="size-9 rounded-full border border-white/30 bg-black/40 hover:bg-white hover:text-black text-white flex items-center justify-center backdrop-blur-md transition-all"
+              aria-label="Slide siguiente"
+            >
+              <ChevronRight className="size-4" />
+            </button>
           </div>
         </>
       )}
-    </div>
+    </section>
   )
 }
