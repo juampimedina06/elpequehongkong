@@ -74,7 +74,22 @@ export function normalizeStoragePaths(
 
   for (const item of rawList) {
     if (typeof item !== 'string') continue
-    const cleaned = item.trim().replace(/^\/+/, '')
+    let cleaned = item.trim()
+    if (!cleaned) continue
+
+    // Strip query parameters or hash
+    cleaned = cleaned.split('?')[0].split('#')[0]
+
+    // If a full Supabase URL or bucket-prefixed path was passed, extract relative path
+    const bucketMarker = `${CATALOG_MEDIA_BUCKET}/`
+    const markerIndex = cleaned.indexOf(bucketMarker)
+    if (markerIndex !== -1) {
+      cleaned = cleaned.slice(markerIndex + bucketMarker.length)
+    }
+
+    // Strip leading slashes
+    cleaned = cleaned.replace(/^\/+/, '')
+
     if (cleaned.length > 0 && !seen.has(cleaned)) {
       seen.add(cleaned)
     }
@@ -133,6 +148,7 @@ export async function deleteCatalogFiles(
   }
 
   const supabase = clientOverride ?? createBrowserSupabaseClient()
+
   const { error } = await supabase.storage
     .from(CATALOG_MEDIA_BUCKET)
     .remove(validPaths)

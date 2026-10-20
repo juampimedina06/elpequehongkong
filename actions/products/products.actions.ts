@@ -1,10 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import {
   getAuthenticatedAdmin,
   type MinimalAuthUserClient,
 } from '@/actions/auth/get-user'
+import {
+  deleteCatalogFiles,
+  type MinimalStorageBucketClient,
+} from '@/services/storage.service'
 import {
   bulkUpdateProductPricesService,
   deleteProductService,
@@ -39,11 +44,20 @@ function revalidateProductRoutes(slugs: string[] = []) {
 
 export async function saveProductAction(
   input: SaveProductWithRelationsInput,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<ProductActionResult<ProductWithRelations>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const saved = await saveProductWithRelationsService(input)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const saved = await saveProductWithRelationsService(input, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateProductRoutes([saved.slug])
     return {
       success: true,
@@ -118,7 +132,10 @@ export async function bulkUpdateProductPricesAction(
 
 export async function deleteProductAction(
   id: string,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<
   ProductActionResult<{
     deletedId: string
@@ -128,7 +145,13 @@ export async function deleteProductAction(
 > {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const deleted = await deleteProductService(id)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const deleted = await deleteProductService(id, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateProductRoutes([deleted.deletedSlug])
     return {
       success: true,

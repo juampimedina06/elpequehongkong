@@ -152,10 +152,14 @@ describe('Work Unit 3 (TICKET-03): WebP Compression & catalog-media Storage Hygi
         '   ',
         'banners/171000-uuid.webp',
         '/products/item-2.webp',
+        'catalog-media/products/item-3.webp',
+        'https://demo.supabase.co/storage/v1/object/public/catalog-media/products/item-4.webp?v=123#hash',
       ])
       assert.deepEqual(normalized, [
         'banners/171000-uuid.webp',
         'products/item-2.webp',
+        'products/item-3.webp',
+        'products/item-4.webp',
       ])
 
       const removedBatches: string[][] = []

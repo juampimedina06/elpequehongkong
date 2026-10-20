@@ -2,6 +2,7 @@ import { slugify } from '@/utils/formatters'
 import { deleteCatalogFiles } from '@/services/storage.service'
 import {
   deleteProductRowById,
+  deleteProductStorageFilesServer,
   fetchProductsPricingByIds,
   getActiveProductBySlugWithRelations,
   getProductByIdWithRelations,
@@ -284,7 +285,7 @@ export async function saveProductWithRelationsService(
 
   const getExistingFn = deps?.getExistingProduct ?? getProductByIdWithRelations
   const persistFn = deps?.persistProductAggregate ?? persistProductAggregateInDb
-  const deleteStorageFn = deps?.deleteFiles ?? deleteCatalogFiles
+  const deleteStorageFn = deps?.deleteFiles ?? deleteProductStorageFilesServer
 
   const newlyUploaded = input.newlyUploadedStoragePaths ?? []
 
@@ -515,7 +516,7 @@ export async function deleteProductService(
 }> {
   const getExistingFn = deps?.getExistingProduct ?? getProductByIdWithRelations
   const deleteRowFn = deps?.deleteProductRow ?? deleteProductRowById
-  const deleteStorageFn = deps?.deleteFiles ?? deleteCatalogFiles
+  const deleteStorageFn = deps?.deleteFiles ?? deleteProductStorageFilesServer
 
   const existing = await getExistingFn(id)
   if (!existing) {

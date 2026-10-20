@@ -1,10 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import {
   getAuthenticatedAdmin,
   type MinimalAuthUserClient,
 } from '@/actions/auth/get-user'
+import {
+  deleteCatalogFiles,
+  type MinimalStorageBucketClient,
+} from '@/services/storage.service'
 import {
   createBannerService,
   deleteBannerService,
@@ -30,11 +35,20 @@ function revalidateBannerRoutes() {
 
 export async function createBannerAction(
   input: BannerMutationInput,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<BannerActionResult<HomeBannerRow>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const created = await createBannerService(input)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const created = await createBannerService(input, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateBannerRoutes()
     return {
       success: true,
@@ -55,11 +69,20 @@ export async function createBannerAction(
 export async function updateBannerAction(
   id: string,
   input: BannerMutationInput,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<BannerActionResult<HomeBannerRow>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const updated = await updateBannerService(id, input)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const updated = await updateBannerService(id, input, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateBannerRoutes()
     return {
       success: true,
@@ -104,13 +127,22 @@ export async function toggleBannerActiveAction(
 
 export async function deleteBannerAction(
   id: string,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<
   BannerActionResult<{ deletedId: string; deletedStoragePath: string | null }>
 > {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const deleted = await deleteBannerService(id)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const deleted = await deleteBannerService(id, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateBannerRoutes()
     return {
       success: true,

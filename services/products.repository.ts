@@ -1,4 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
+import {
+  deleteCatalogFiles,
+  type MinimalStorageBucketClient,
+} from '@/services/storage.service'
 import type {
   CategoryRow,
   Database,
@@ -254,6 +258,16 @@ export async function deleteProductRowById(id: string): Promise<void> {
   if (error) {
     throw new Error(`No se pudo eliminar el producto: ${error.message}`)
   }
+}
+
+export async function deleteProductStorageFilesServer(
+  storagePaths: string | string[] | null | undefined
+): Promise<{ deletedPaths: string[] }> {
+  const supabase = await createClient()
+  return deleteCatalogFiles(
+    storagePaths,
+    supabase as unknown as MinimalStorageBucketClient
+  )
 }
 
 export interface PersistProductAggregatePayload {

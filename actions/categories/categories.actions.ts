@@ -1,10 +1,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import {
   getAuthenticatedAdmin,
   type MinimalAuthUserClient,
 } from '@/actions/auth/get-user'
+import {
+  deleteCatalogFiles,
+  type MinimalStorageBucketClient,
+} from '@/services/storage.service'
 import {
   createCategoryService,
   deleteCategoryService,
@@ -31,11 +36,20 @@ function revalidateCategoryRoutes() {
 
 export async function createCategoryAction(
   input: CategoryMutationInput,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<CategoryActionResult<CategoryRow>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const created = await createCategoryService(input)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const created = await createCategoryService(input, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateCategoryRoutes()
     return {
       success: true,
@@ -56,11 +70,20 @@ export async function createCategoryAction(
 export async function updateCategoryAction(
   id: string,
   input: CategoryMutationInput,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<CategoryActionResult<CategoryRow>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const updated = await updateCategoryService(id, input)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const updated = await updateCategoryService(id, input, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateCategoryRoutes()
     return {
       success: true,
@@ -80,11 +103,20 @@ export async function updateCategoryAction(
 
 export async function deleteCategoryAction(
   id: string,
-  deps?: { authClient?: MinimalAuthUserClient }
+  deps?: {
+    authClient?: MinimalAuthUserClient
+    storageClient?: MinimalStorageBucketClient
+  }
 ): Promise<CategoryActionResult<DeleteCategoryResult>> {
   try {
     await getAuthenticatedAdmin(deps?.authClient)
-    const deleted = await deleteCategoryService(id)
+    const storageClient =
+      deps?.storageClient ??
+      ((await createClient()) as unknown as MinimalStorageBucketClient)
+
+    const deleted = await deleteCategoryService(id, {
+      deleteFiles: (paths) => deleteCatalogFiles(paths, storageClient),
+    })
     revalidateCategoryRoutes()
     return {
       success: true,
