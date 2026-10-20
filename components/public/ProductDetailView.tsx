@@ -5,8 +5,9 @@ import type { ProductWithRelations, ProductVariantRow } from '@/types/database.t
 import { ProductGallery } from '@/components/public/ProductGallery'
 import { ProductVariantSelector } from '@/components/public/ProductVariantSelector'
 import { computeProductBadges } from '@/utils/product-badges'
+import { formatCurrency, buildProductWhatsAppUrl } from '@/utils/formatters'
 import Link from 'next/link'
-import { ChevronRight, ShieldCheck, Truck, RotateCcw } from 'lucide-react'
+import { ChevronDown, MessageCircle } from 'lucide-react'
 
 interface ProductDetailViewProps {
   product: ProductWithRelations
@@ -14,6 +15,7 @@ interface ProductDetailViewProps {
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
   const [activeImageId, setActiveImageId] = useState<string | null>(null)
+  const [openAccordion, setOpenAccordion] = useState<string | null>('detalles')
 
   const activeVariants = (product.variants ?? []).filter(
     (v) => v.is_active !== false
@@ -36,8 +38,13 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
     is_featured: product.is_featured,
   })
 
+  const discountBadge = badges.find((b) => b.type === 'discount')
+  const newBadge = badges.find((b) => b.type === 'new')
+  const stockBadge = badges.find(
+    (b) => b.type === 'out_of_stock' || b.type === 'low_stock'
+  )
+
   const handleVariantSelect = (variant: ProductVariantRow) => {
-    // If variant has an image linked, find its image id
     if (variant.image_id) {
       setActiveImageId(variant.image_id)
     } else {
@@ -50,73 +57,94 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
     }
   }
 
+  const toggleAccordion = (section: string) => {
+    setOpenAccordion((prev) => (prev === section ? null : section))
+  }
+
+  const productUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/producto/${product.slug}`
+      : `/producto/${product.slug}`
+
+  const quickWhatsappUrl = buildProductWhatsAppUrl({
+    productName: product.name,
+    productUrl,
+  })
+
   return (
-    <div className="space-y-8">
-      {/* Breadcrumb Navigation */}
+    <div className="space-y-8 sm:space-y-12">
+      {/* Navegación Breadcrumb Estilo Editorial Kith */}
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-1.5 text-xs text-zinc-400 overflow-x-auto whitespace-nowrap pb-1"
+        className="flex items-center gap-2 text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-400 overflow-x-auto whitespace-nowrap pb-2 border-b border-black/10"
       >
-        <Link href="/" className="hover:text-zinc-700 transition">
+        <Link href="/" className="hover:text-black transition">
           Inicio
         </Link>
-        <ChevronRight className="size-3 shrink-0" />
-        <Link href="/catalogo" className="hover:text-zinc-700 transition">
+        <span>/</span>
+        <Link href="/catalogo" className="hover:text-black transition">
           Catálogo
         </Link>
         {product.category && (
           <>
-            <ChevronRight className="size-3 shrink-0" />
+            <span>/</span>
             <Link
               href={`/catalogo?categoria=${product.category.slug}`}
-              className="hover:text-zinc-700 transition"
+              className="hover:text-black transition"
             >
               {product.category.name}
             </Link>
           </>
         )}
-        <ChevronRight className="size-3 shrink-0" />
-        <span className="text-zinc-700 font-medium truncate max-w-xs">
+        <span>/</span>
+        <span className="text-zinc-950 truncate max-w-xs font-black">
           {product.name}
         </span>
       </nav>
 
-      {/* Main Grid: Gallery + Variant & Purchase Information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {/* Left: Gallery with Zoom */}
-        <div>
+      {/* Grid Principal Editorial 2 Columnas */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        {/* Columna Izquierda: Galería Editorial (7 columnas) */}
+        <div className="lg:col-span-7 w-full">
           <ProductGallery
             images={product.images}
             activeImageId={activeImageId}
           />
         </div>
 
-        {/* Right: Product Details & Variant Selection */}
-        <div className="space-y-6">
-          {/* Header & Badges */}
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-1.5 items-center">
+        {/* Columna Derecha: Información y Compra (5 columnas, Sticky) */}
+        <div className="lg:col-span-5 space-y-8 lg:sticky lg:top-28">
+          {/* Header de Producto estilo Kith */}
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
               {product.category && (
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400">
                   {product.category.name}
                 </span>
               )}
-              {badges.map((badge, idx) => (
-                <span
-                  key={idx}
-                  className={`px-2 py-0.5 text-[10px] rounded-md ${badge.className}`}
-                >
-                  {badge.label}
+              {discountBadge && (
+                <span className="bg-black text-white text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
+                  {discountBadge.label}
                 </span>
-              ))}
+              )}
+              {newBadge && !discountBadge && (
+                <span className="bg-white text-black border border-black text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
+                  Nuevo Drop
+                </span>
+              )}
+              {stockBadge && (
+                <span className="bg-zinc-900 text-white text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
+                  {stockBadge.label}
+                </span>
+              )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-zinc-950 leading-tight">
               {product.name}
             </h1>
           </div>
 
-          {/* Interactive Variant Selector & WhatsApp CTA */}
+          {/* Selector de Variantes, Precios y CTA */}
           <ProductVariantSelector
             productName={product.name}
             productSlug={product.slug}
@@ -126,38 +154,127 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             onVariantSelect={handleVariantSelect}
           />
 
-          {/* Store Benefits */}
-          <div className="grid grid-cols-3 gap-3 pt-4 border-t border-zinc-100 text-[11px] text-zinc-500">
-            <div className="flex flex-col items-center text-center gap-1.5 p-2 rounded-xl bg-zinc-50">
-              <ShieldCheck className="size-4 text-zinc-700" />
-              <span className="font-medium text-zinc-900">Garantía Real</span>
-              <span className="text-[10px] text-zinc-400">Control de calidad</span>
+          {/* Acordeones Editoriales Kith con Separadores Negros */}
+          <div className="border-t border-black divide-y divide-black/15 pt-2">
+            {/* 01 / DESCRIPCIÓN & DETALLES */}
+            <div>
+              <button
+                type="button"
+                onClick={() => toggleAccordion('detalles')}
+                className="w-full py-4 flex items-center justify-between text-left group"
+              >
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-600 transition">
+                  01 / Detalles &amp; Especificaciones
+                </span>
+                <ChevronDown
+                  className={`size-4 text-zinc-500 transition-transform duration-300 ${
+                    openAccordion === 'detalles' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              {openAccordion === 'detalles' && (
+                <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-3 font-normal">
+                  {product.description ? (
+                    <div className="whitespace-pre-line">
+                      {product.description}
+                    </div>
+                  ) : (
+                    <p className="text-zinc-400 italic">
+                      Artículo original seleccionado de importación. Comunícate con nosotros para medidas exactas o consultas técnicas de este modelo.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="flex flex-col items-center text-center gap-1.5 p-2 rounded-xl bg-zinc-50">
-              <Truck className="size-4 text-zinc-700" />
-              <span className="font-medium text-zinc-900">Retiro Inmediato</span>
-              <span className="text-[10px] text-zinc-400">O envío a convenir</span>
+
+            {/* 02 / LOCAL FÍSICO & RETIRO */}
+            <div>
+              <button
+                type="button"
+                onClick={() => toggleAccordion('retiro')}
+                className="w-full py-4 flex items-center justify-between text-left group"
+              >
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-600 transition">
+                  02 / Disponibilidad en Local &amp; Envíos
+                </span>
+                <ChevronDown
+                  className={`size-4 text-zinc-500 transition-transform duration-300 ${
+                    openAccordion === 'retiro' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              {openAccordion === 'retiro' && (
+                <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2">
+                  <p>
+                    <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block">
+                      Retiro en Mostrador:
+                    </strong>
+                    Podés pasar a retirar tu pedido en el día una vez confirmada la disponibilidad de la variante por WhatsApp.
+                  </p>
+                  <p>
+                    <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block mt-2">
+                      Envíos a Domicilio:
+                    </strong>
+                    Coordinamos envíos por mensajería local o despacho por encomienda / correo a todo el país.
+                  </p>
+                </div>
+              )}
             </div>
-            <div className="flex flex-col items-center text-center gap-1.5 p-2 rounded-xl bg-zinc-50">
-              <RotateCcw className="size-4 text-zinc-700" />
-              <span className="font-medium text-zinc-900">Atención Directa</span>
-              <span className="text-[10px] text-zinc-400">Sin intermediarios</span>
+
+            {/* 03 / FORMAS DE PAGO */}
+            <div>
+              <button
+                type="button"
+                onClick={() => toggleAccordion('pagos')}
+                className="w-full py-4 flex items-center justify-between text-left group"
+              >
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-600 transition">
+                  03 / Medios de Pago &amp; Facturación
+                </span>
+                <ChevronDown
+                  className={`size-4 text-zinc-500 transition-transform duration-300 ${
+                    openAccordion === 'pagos' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              {openAccordion === 'pagos' && (
+                <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2">
+                  <p>
+                    Aceptamos <strong>efectivo en el local</strong>, transferencias bancarias directas y billeteras virtuales (Mercado Pago, Cuenta DNI, Ualá).
+                  </p>
+                  <p className="text-[11px] text-zinc-400">
+                    Consultá por cuotas o promociones bancarias vigentes de la semana.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Description Section */}
-      {product.description && (
-        <div className="pt-8 border-t border-zinc-200/80 space-y-3 max-w-3xl">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-900">
-            Descripción y Especificaciones
-          </h2>
-          <div className="text-xs sm:text-sm text-zinc-600 leading-relaxed whitespace-pre-line">
-            {product.description}
-          </div>
+      {/* Barra Inferior Fija para Mobile (Estilo Sticky Buy Bar Kith) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-black p-3 px-4 flex items-center justify-between gap-3 shadow-xl">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-tight text-zinc-950 truncate">
+            {product.name}
+          </p>
+          <p className="text-xs font-bold text-zinc-900 font-mono">
+            {formatCurrency(product.base_price)}
+          </p>
         </div>
-      )}
+
+        {quickWhatsappUrl && (
+          <a
+            href={quickWhatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 bg-black hover:bg-zinc-800 text-white font-black tracking-[0.2em] uppercase text-[11px] py-3 px-5 flex items-center gap-2 transition-colors"
+          >
+            <MessageCircle className="size-3.5" />
+            <span>Pedir WhatsApp</span>
+          </a>
+        )}
+      </div>
     </div>
   )
 }
