@@ -460,9 +460,77 @@ export async function fetchRandomShowcaseProductsRpc(
     const { data, error } = await supabase.rpc('get_random_showcase_products', {
       p_limit: limit,
     } as never)
-    if (error || !data) return null
-    return data as unknown as ShowcaseProductItem[]
+    const rows = data as unknown as Array<Record<string, unknown>> | null
+    if (error || !rows || !Array.isArray(rows) || rows.length === 0) return null
+
+    const first = rows[0]
+    if ('primary_image_url' in first && first.primary_image_url !== undefined) {
+      return rows as unknown as ShowcaseProductItem[]
+    }
+
+    // Si la función RPC en la base de datos es la versión legacy que devuelve sólo filas de productos,
+    const productIds = rows.map((p) => String(p.id ?? '')).filter(Boolean)
+    if (productIds.length === 0) return null
+
+    const { data: fullData, error: fullError } = await supabase
+      .from('products')
+      .select(PRODUCT_RELATION_SELECT)
+      .in('id', productIds)
+
+    if (fullError || !fullData) return null
+
+    const fullProducts = (fullData as unknown as Array<Record<string, unknown>>).map(
+      mapRawProductWithRelations
+    )
+
+    const productMap = new Map(fullProducts.map((p) => [p.id, p]))
+
+    return productIds
+      .map((id) => productMap.get(id))
+      .filter((p): p is ProductWithRelations => Boolean(p))
+      .map((p) => {
+        const sortedImages = [...(p.images ?? [])].sort((a, b) => {
+          if (a.is_primary !== b.is_primary) return a.is_primary ? -1 : 1
+          return (a.display_order ?? 0) - (b.display_order ?? 0)
+        })
+
+        const activeVariants = (p.variants ?? []).filter(
+          (v) => v.is_active !== false
+        )
+        const totalStock = activeVariants.reduce(
+          (sum, v) => sum + Math.max(0, Number(v.stock_quantity ?? 0)),
+          0
+        )
+        const minStockAlert =
+          activeVariants.length > 0
+            ? Math.min(
+                ...activeVariants.map((v) => Math.max(0, Number(v.min_stock_alert ?? 3)))
+              )
+            : 3
+
+        return {
+          id: p.id,
+          name: p.name,
+          slug: p.slug,
+          description: p.description,
+          base_price: Number(p.base_price),
+          compare_at_price:
+            p.compare_at_price !== null && p.compare_at_price !== undefined
+              ? Number(p.compare_at_price)
+              : null,
+          category_id: p.category_id,
+          category_name: p.category?.name ?? null,
+          category_slug: p.category?.slug ?? null,
+          primary_image_url: sortedImages[0]?.url ?? null,
+          secondary_image_url: sortedImages[1]?.url ?? null,
+          total_stock: totalStock,
+          min_stock_alert: minStockAlert,
+          is_featured: Boolean(p.is_featured),
+          created_at: p.created_at,
+        }
+      })
   } catch {
     return null
   }
 }
+

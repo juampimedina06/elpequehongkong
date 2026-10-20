@@ -43,11 +43,25 @@ export function ProductCard({ product }: ProductCardProps) {
         : 3
     categoryName = product.category?.name ?? null
   } else {
-    primaryImageUrl = product.primary_image_url
-    totalStock = product.total_stock
-    minStockAlert = product.min_stock_alert
-    categoryName = product.category_name
+    primaryImageUrl =
+      product.primary_image_url ||
+      (product as unknown as { images?: Array<{ url: string }> }).images?.[0]?.url ||
+      null
+    secondaryImageUrl =
+      product.secondary_image_url ||
+      (product as unknown as { images?: Array<{ url: string }> }).images?.[1]?.url ||
+      null
+    totalStock = Number(product.total_stock ?? 0)
+    minStockAlert = Number(product.min_stock_alert ?? 3)
+    categoryName =
+      product.category_name ||
+      (product as unknown as { category?: { name: string } }).category?.name ||
+      null
   }
+
+  primaryImageUrl = primaryImageUrl?.trim() || null
+  secondaryImageUrl = secondaryImageUrl?.trim() || null
+
 
   const badges = computeProductBadges({
     base_price: product.base_price,
