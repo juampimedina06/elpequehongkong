@@ -102,6 +102,17 @@ elpequehongkong/
 - Activación/desactivación instantánea (`is_active`) y control de visualización (`display_order`).
 - Home pública (`/`) dinámica: vitrina de banners activos, categorías principales, recién llegados y productos destacados.
 
+### 8. Catálogo Público, Ficha de Producto (SEO) y Consulta por WhatsApp
+- Exploración de catálogo (`/catalogo`) con filtros 100% sincronizados en la URL (`searchParams`) con debounce y sin bloqueos de interfaz:
+  - Búsqueda por texto (nombre/SKU) optimizada con PostgreSQL `pg_trgm`.
+  - Filtro por categorías padre e hijas, rango de precios y switch de solo en stock.
+  - Ordenamiento por recientes y precio (`asc` / `desc`).
+- **Badges Automáticos**: cálculo determinístico de etiquetas (`Nuevo` en < 7 días, `-% OFF`, `Últimas unidades`, `Sin stock` y `Destacado`).
+- Ficha de detalle (`/producto/[slug]`):
+  - Galería con zoom interactivo, miniaturas ordenadas y selector dinámico de variantes (talles, colores, medidas).
+  - Enlace de consulta directa a WhatsApp con mensaje prearmado sin fricción de carrito.
+  - Metadatos OpenGraph y Twitter Cards generados dinámicamente (`generateMetadata`) para SEO de alto impacto.
+
 ---
 
 ## 🛠️ Instalación y Configuración Local
@@ -148,7 +159,7 @@ Ejecuta la migración inicial de Supabase ubicada en `supabase/migrations/` en e
 El proyecto cuenta con una suite completa de pruebas unitarias y de integración que validan los servicios, seguridad y dominio:
 
 ```bash
-# Ejecutar suite de tests (64 tests unitarios y de integración)
+# Ejecutar suite de tests (75 tests unitarios y de integración)
 npm test
 
 # Verificación de tipos TypeScript estricta
