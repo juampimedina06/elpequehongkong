@@ -35,7 +35,7 @@ export function PublicNavbar() {
         }`}
       >
         <div className="inline-block animate-pulse">
-          Venta y retiro en local comercial · Atención directa por WhatsApp · Nueva Colección
+          Av. Alem 2874, B° Villa Azalais, Córdoba · Lun a Vie 9:30-13 / 16-20:30 · Sáb 9:30-20:30 · Dom 10-13 · Efectivo, Transf., Crédito (+10%)
         </div>
       </div>
 
@@ -109,6 +109,19 @@ export function PublicNavbar() {
                 }`}
               >
                 <span>Destacados</span>
+                <span
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
+                    isTransparent ? 'bg-white' : 'bg-black'
+                  }`}
+                />
+              </Link>
+              <Link
+                href="/#ubicacion"
+                className={`py-1 relative group transition-colors ${
+                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                }`}
+              >
+                <span>Ubicación</span>
                 <span
                   className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
                     isTransparent ? 'bg-white' : 'bg-black'
@@ -235,9 +248,30 @@ export function PublicNavbar() {
                 <span>04 / Destacados &amp; Esenciales</span>
                 <ArrowUpRight className="size-3 text-zinc-400" />
               </Link>
+              <Link
+                href="/#ubicacion"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
+              >
+                <span>05 / Ubicación &amp; Local</span>
+                <ArrowUpRight className="size-3 text-zinc-400" />
+              </Link>
             </nav>
 
-            <div className="pt-2 space-y-3">
+            {/* Ficha Rápida del Local */}
+            <div className="p-3 bg-zinc-50 border border-black/10 space-y-1">
+              <p className="text-[11px] font-black uppercase tracking-wider text-zinc-950">
+                Av. Alem 2874, B° Villa Azalais, Córdoba
+              </p>
+              <p className="text-[10px] text-zinc-500 font-mono">
+                Lun-Vie 9:30-13 / 16-20:30 · Sáb 9:30-20:30 · Dom 10-13
+              </p>
+              <p className="text-[10px] text-zinc-600 font-bold uppercase pt-1">
+                Pagos: Efectivo · Transferencia · Crédito (+10%)
+              </p>
+            </div>
+
+            <div className="pt-1 space-y-2.5">
               <a
                 href="https://wa.me/5491100000000?text=Hola!%20Quería%20hacer%20una%20consulta%20sobre%20el%20catálogo"
                 target="_blank"

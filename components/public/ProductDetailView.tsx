@@ -204,16 +204,26 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 />
               </button>
               {openAccordion === 'retiro' && (
-                <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2">
+                <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2.5">
                   <p>
                     <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block">
-                      Venta y Retiro Exclusivo en Mostrador:
+                      Venta y Retiro Exclusivo en Mostrador (Sin Envíos):
                     </strong>
-                    El negocio no realiza envíos a domicilio. Podés acercarte a nuestro local comercial a retirar tu producto en el día una vez confirmada la disponibilidad de la variante por WhatsApp.
+                    Podés pasar a retirar tu producto directamente por nuestro local comercial en:
                   </p>
-                  <p className="text-[11px] text-zinc-400">
-                    Consultá horarios de atención y dirección exacta directamente por WhatsApp.
+                  <p className="font-bold text-zinc-900 uppercase text-[11px] bg-zinc-50 p-2.5 border border-black/10">
+                    Av. Alem 2874, B° Villa Azalais, Córdoba Capital
                   </p>
+                  <div>
+                    <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block mb-1">
+                      Horarios de Atención:
+                    </strong>
+                    <ul className="space-y-0.5 text-[11px] text-zinc-600 font-mono">
+                      <li>• Lun a Vie: 9:30 a 13:00 / 16:00 a 20:30</li>
+                      <li>• Sábados: 9:30 a 20:30 (de corrido)</li>
+                      <li>• Domingos: 10:00 a 13:00</li>
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -226,7 +236,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 className="w-full py-4 flex items-center justify-between text-left group"
               >
                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-600 transition">
-                  03 / Medios de Pago &amp; Facturación
+                  03 / Medios de Pago Aceptados
                 </span>
                 <ChevronDown
                   className={`size-4 text-zinc-500 transition-transform duration-300 ${
@@ -236,12 +246,20 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               </button>
               {openAccordion === 'pagos' && (
                 <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2">
-                  <p>
-                    Aceptamos <strong>efectivo en el local</strong>, transferencias bancarias directas y billeteras virtuales (Mercado Pago, Cuenta DNI, Ualá).
-                  </p>
-                  <p className="text-[11px] text-zinc-400">
-                    Consultá por cuotas o promociones bancarias vigentes de la semana.
-                  </p>
+                  <div className="grid grid-cols-1 gap-2 pt-1">
+                    <div className="p-2 border border-black/10 bg-zinc-50">
+                      <span className="font-bold text-zinc-900 uppercase text-[11px] block">💵 Efectivo</span>
+                      <span className="text-[10px] text-zinc-500">Pago directo en mostrador al retirar</span>
+                    </div>
+                    <div className="p-2 border border-black/10 bg-zinc-50">
+                      <span className="font-bold text-zinc-900 uppercase text-[11px] block">📱 Transferencia</span>
+                      <span className="text-[10px] text-zinc-500">Transferencias bancarias y billeteras virtuales</span>
+                    </div>
+                    <div className="p-2 border border-black/10 bg-zinc-50">
+                      <span className="font-bold text-zinc-900 uppercase text-[11px] block">💳 Tarjetas de Crédito (+10%)</span>
+                      <span className="text-[10px] text-zinc-500">Aplica recargo del 10% sobre el total</span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

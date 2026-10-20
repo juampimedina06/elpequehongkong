@@ -9,6 +9,7 @@ import { PublicFooter } from '@/components/public/PublicFooter'
 import { HeroCarousel } from '@/components/public/HeroCarousel'
 import { CategoryGrid } from '@/components/public/CategoryGrid'
 import { ProductCard } from '@/components/public/ProductCard'
+import { StoreLocationSection } from '@/components/public/StoreLocationSection'
 
 export const revalidate = 60
 
@@ -117,6 +118,9 @@ export default async function HomePage() {
             </div>
           </section>
         )}
+
+        {/* Sección 04: Ubicación, Horarios y Mapa */}
+        <StoreLocationSection />
       </main>
 
       <PublicFooter />
