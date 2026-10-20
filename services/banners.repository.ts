@@ -19,12 +19,26 @@ const BANNER_COLUMNS = `
   image_url,
   storage_path,
   link_url,
-  cta_text,
   display_order,
   is_active,
-  created_at,
-  updated_at
+  created_at
 `
+
+function mapRawBannerRow(raw: Record<string, unknown>): HomeBannerRow {
+  return {
+    id: String(raw.id),
+    title: String(raw.title ?? ''),
+    subtitle: (raw.subtitle as string | null) ?? null,
+    image_url: String(raw.image_url ?? ''),
+    storage_path: String(raw.storage_path ?? ''),
+    link_url: String(raw.link_url ?? '/catalogo'),
+    cta_text: (raw.cta_text as string | null) ?? 'Ver Catálogo',
+    display_order: Number(raw.display_order ?? 0),
+    is_active: Boolean(raw.is_active),
+    created_at: String(raw.created_at ?? ''),
+    updated_at: (raw.updated_at as string | null) ?? String(raw.created_at ?? ''),
+  }
+}
 
 export async function listAllBanners(): Promise<HomeBannerRow[]> {
   const supabase = await createClient()
@@ -35,7 +49,7 @@ export async function listAllBanners(): Promise<HomeBannerRow[]> {
     .order('created_at', { ascending: false })
 
   if (error || !data) return []
-  return data as unknown as HomeBannerRow[]
+  return (data as unknown as Array<Record<string, unknown>>).map(mapRawBannerRow)
 }
 
 export async function listActiveBanners(): Promise<HomeBannerRow[]> {
@@ -48,7 +62,7 @@ export async function listActiveBanners(): Promise<HomeBannerRow[]> {
     .order('created_at', { ascending: false })
 
   if (error || !data) return []
-  return data as unknown as HomeBannerRow[]
+  return (data as unknown as Array<Record<string, unknown>>).map(mapRawBannerRow)
 }
 
 export async function getBannerById(id: string): Promise<HomeBannerRow | null> {
@@ -60,23 +74,28 @@ export async function getBannerById(id: string): Promise<HomeBannerRow | null> {
     .maybeSingle()
 
   if (error || !data) return null
-  return data as unknown as HomeBannerRow
+  return mapRawBannerRow(data as unknown as Record<string, unknown>)
 }
 
 export async function insertBannerRow(
   payload: BannerInsert
 ): Promise<HomeBannerRow> {
   const supabase = await createClient()
+  // Sanitizar payload: omitir columnas no existentes en la tabla remota
+  const { cta_text, ...dbPayload } = (payload ?? {}) as Record<string, unknown>
   const { data, error } = await supabase
     .from('home_banners')
-    .insert(payload as never)
+    .insert(dbPayload as never)
     .select(BANNER_COLUMNS)
     .single()
 
   if (error || !data) {
     throw new Error(error?.message ?? 'No se pudo crear el banner de portada.')
   }
-  return data as unknown as HomeBannerRow
+  return mapRawBannerRow({
+    ...(data as Record<string, unknown>),
+    cta_text: (cta_text as string | null) ?? 'Ver Catálogo',
+  })
 }
 
 export async function updateBannerRow(
@@ -84,12 +103,10 @@ export async function updateBannerRow(
   payload: BannerUpdate
 ): Promise<HomeBannerRow> {
   const supabase = await createClient()
+  const { cta_text, updated_at, ...dbPayload } = (payload ?? {}) as Record<string, unknown>
   const { data, error } = await supabase
     .from('home_banners')
-    .update({
-      ...payload,
-      updated_at: new Date().toISOString(),
-    } as never)
+    .update(dbPayload as never)
     .eq('id', id)
     .select(BANNER_COLUMNS)
     .single()
@@ -99,7 +116,10 @@ export async function updateBannerRow(
       error?.message ?? 'No se pudo actualizar el banner de portada.'
     )
   }
-  return data as unknown as HomeBannerRow
+  return mapRawBannerRow({
+    ...(data as Record<string, unknown>),
+    cta_text: (cta_text as string | null) ?? 'Ver Catálogo',
+  })
 }
 
 export async function deleteBannerRow(id: string): Promise<void> {
