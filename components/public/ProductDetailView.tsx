@@ -195,7 +195,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 className="w-full py-4 flex items-center justify-between text-left group"
               >
                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-zinc-950 group-hover:text-zinc-600 transition">
-                  02 / Disponibilidad en Local &amp; Envíos
+                  02 / Venta &amp; Retiro en Local (Sin Envíos)
                 </span>
                 <ChevronDown
                   className={`size-4 text-zinc-500 transition-transform duration-300 ${
@@ -207,15 +207,12 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 <div className="pb-5 pt-1 text-xs text-zinc-600 leading-relaxed space-y-2">
                   <p>
                     <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block">
-                      Retiro en Mostrador:
+                      Venta y Retiro Exclusivo en Mostrador:
                     </strong>
-                    Podés pasar a retirar tu pedido en el día una vez confirmada la disponibilidad de la variante por WhatsApp.
+                    El negocio no realiza envíos a domicilio. Podés acercarte a nuestro local comercial a retirar tu producto en el día una vez confirmada la disponibilidad de la variante por WhatsApp.
                   </p>
-                  <p>
-                    <strong className="text-zinc-900 font-semibold uppercase tracking-wider text-[11px] block mt-2">
-                      Envíos a Domicilio:
-                    </strong>
-                    Coordinamos envíos por mensajería local o despacho por encomienda / correo a todo el país.
+                  <p className="text-[11px] text-zinc-400">
+                    Consultá horarios de atención y dirección exacta directamente por WhatsApp.
                   </p>
                 </div>
               )}

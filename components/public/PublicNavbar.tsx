@@ -1,24 +1,52 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { Search, Shield, Menu, X, MessageCircle, ArrowUpRight } from 'lucide-react'
 
 export function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Transparente únicamente en la home antes de scrollear
+  const isTransparent = isHome && !isScrolled
 
   return (
-    <>
-      {/* Ticker Superior Estilo Kith Announcement Bar */}
-      <div className="bg-black text-white text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center overflow-hidden border-b border-black">
+    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      {/* Ticker Superior de Anuncios (Sin mención de envíos) */}
+      <div
+        className={`text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center transition-colors duration-300 ${
+          isTransparent
+            ? 'bg-black/60 text-white backdrop-blur-xs border-b border-white/10'
+            : 'bg-black text-white border-b border-black'
+        }`}
+      >
         <div className="inline-block animate-pulse">
-          Envíos a todo el país · Atención directa por WhatsApp · Nueva Colección
+          Venta y retiro en local comercial · Atención directa por WhatsApp · Nueva Colección
         </div>
       </div>
 
-      {/* Navbar Editorial 3 Columnas al estilo Kith */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-black/10 transition-all">
+      {/* Barra Principal de Navegación 3 Columnas al estilo Kith */}
+      <nav
+        className={`transition-all duration-300 ${
+          isTransparent
+            ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b border-transparent'
+            : 'bg-white/95 text-zinc-950 backdrop-blur-md border-b border-black/10 shadow-xs'
+        }`}
+      >
         <div className="mx-auto flex h-16 sm:h-20 max-w-[1760px] items-center justify-between px-4 sm:px-8 lg:px-12">
           
           {/* COLUMNA IZQUIERDA: Menú Mobile & Enlaces Principales Desktop */}
@@ -26,42 +54,68 @@ export function PublicNavbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 -ml-2 text-zinc-950 hover:text-zinc-600 transition"
+              className={`lg:hidden p-2 -ml-2 transition ${
+                isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-950 hover:text-zinc-600'
+              }`}
               aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
 
-            <nav className="hidden lg:flex items-center gap-7 xl:gap-9 text-[11px] font-extrabold tracking-[0.2em] uppercase text-zinc-800">
+            <div className="hidden lg:flex items-center gap-7 xl:gap-9 text-[11px] font-extrabold tracking-[0.2em] uppercase">
               <Link
                 href="/#novedades"
-                className="hover:text-black transition-colors py-1 relative group"
+                className={`py-1 relative group transition-colors ${
+                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                }`}
               >
                 <span>Novedades</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black transition-all duration-300 group-hover:w-full" />
+                <span
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
+                    isTransparent ? 'bg-white' : 'bg-black'
+                  }`}
+                />
               </Link>
               <Link
                 href="/#categorias"
-                className="hover:text-black transition-colors py-1 relative group"
+                className={`py-1 relative group transition-colors ${
+                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                }`}
               >
                 <span>Colecciones</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black transition-all duration-300 group-hover:w-full" />
+                <span
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
+                    isTransparent ? 'bg-white' : 'bg-black'
+                  }`}
+                />
               </Link>
               <Link
                 href="/catalogo"
-                className="hover:text-black transition-colors py-1 relative group"
+                className={`py-1 relative group transition-colors ${
+                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                }`}
               >
                 <span>Catálogo</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black transition-all duration-300 group-hover:w-full" />
+                <span
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
+                    isTransparent ? 'bg-white' : 'bg-black'
+                  }`}
+                />
               </Link>
               <Link
                 href="/#destacados"
-                className="hover:text-black transition-colors py-1 relative group"
+                className={`py-1 relative group transition-colors ${
+                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                }`}
               >
                 <span>Destacados</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-black transition-all duration-300 group-hover:w-full" />
+                <span
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
+                    isTransparent ? 'bg-white' : 'bg-black'
+                  }`}
+                />
               </Link>
-            </nav>
+            </div>
           </div>
 
           {/* COLUMNA CENTRAL: Logotipo Icónico Centrado */}
@@ -70,7 +124,11 @@ export function PublicNavbar() {
               href="/"
               className="group flex items-center gap-2.5 sm:gap-3 text-center"
             >
-              <div className="relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border border-black/15 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+              <div
+                className={`relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border shadow-2xs group-hover:scale-105 transition-all duration-300 bg-white ${
+                  isTransparent ? 'border-white/40 ring-2 ring-white/20' : 'border-black/15'
+                }`}
+              >
                 <Image
                   src="/assets/img/logo.png"
                   alt="El Pequeño Hong Kong"
@@ -81,10 +139,18 @@ export function PublicNavbar() {
                 />
               </div>
               <div className="flex flex-col items-start text-left">
-                <span className="font-black text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase text-zinc-950 group-hover:text-zinc-700 transition leading-none">
+                <span
+                  className={`font-black text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase leading-none transition-colors ${
+                    isTransparent ? 'text-white group-hover:text-zinc-200' : 'text-zinc-950 group-hover:text-zinc-700'
+                  }`}
+                >
                   El Peque Hong Kong
                 </span>
-                <span className="text-[8px] sm:text-[9px] font-bold tracking-[0.3em] uppercase text-zinc-400 mt-1">
+                <span
+                  className={`text-[8px] sm:text-[9px] font-bold tracking-[0.3em] uppercase mt-1 transition-colors ${
+                    isTransparent ? 'text-zinc-300' : 'text-zinc-400'
+                  }`}
+                >
                   Est. 2026 · Curaduría &amp; Bazar
                 </span>
               </div>
@@ -95,7 +161,9 @@ export function PublicNavbar() {
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1">
             <Link
               href="/catalogo"
-              className="p-2 text-zinc-800 hover:text-black transition"
+              className={`p-2 transition ${
+                isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-800 hover:text-black'
+              }`}
               title="Buscar en el catálogo"
               aria-label="Buscar"
             >
@@ -106,7 +174,11 @@ export function PublicNavbar() {
               href="https://wa.me/5491100000000?text=Hola!%20Quería%20hacer%20una%20consulta%20sobre%20el%20catálogo"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 bg-black px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase text-white hover:bg-zinc-800 transition"
+              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition ${
+                isTransparent
+                  ? 'bg-white text-black hover:bg-zinc-200'
+                  : 'bg-black text-white hover:bg-zinc-800'
+              }`}
             >
               <MessageCircle className="size-3.5" />
               <span>WhatsApp</span>
@@ -114,7 +186,11 @@ export function PublicNavbar() {
 
             <Link
               href="/admin"
-              className="p-2 text-zinc-400 hover:text-zinc-900 transition text-[10px] font-mono tracking-widest uppercase hidden md:inline-flex items-center gap-1 border-l border-zinc-200 pl-3 ml-1"
+              className={`p-2 text-[10px] font-mono tracking-widest uppercase hidden md:inline-flex items-center gap-1 border-l pl-3 ml-1 transition ${
+                isTransparent
+                  ? 'text-zinc-300 hover:text-white border-white/20'
+                  : 'text-zinc-400 hover:text-zinc-900 border-zinc-200'
+              }`}
               title="Acceso panel de administración"
             >
               <Shield className="size-3.5" />
@@ -125,7 +201,7 @@ export function PublicNavbar() {
 
         {/* Menú Desplegable Mobile Estilo Kith Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-black bg-white px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden border-t border-black bg-white text-zinc-950 px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
             <nav className="flex flex-col gap-4 text-xs font-bold tracking-[0.25em] uppercase text-zinc-950">
               <Link
                 href="/#novedades"
@@ -183,7 +259,7 @@ export function PublicNavbar() {
             </div>
           </div>
         )}
-      </header>
-    </>
+      </nav>
+    </header>
   )
 }

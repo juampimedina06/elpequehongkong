@@ -88,15 +88,15 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/producto/${product.slug}`}
       className="group flex flex-col justify-between bg-transparent transition-all"
     >
-      {/* Contenedor de Imagen con Proporción Editorial 3:4 */}
-      <div className="relative aspect-[3/4] w-full bg-[#f5f5f5] overflow-hidden">
+      {/* Contenedor de Imagen Cuadrado con Fondo Gris Suave Kith (#f0f0f0 / #ececec) */}
+      <div className="relative aspect-square w-full bg-[#f0f0f0] overflow-hidden flex items-center justify-center select-none">
         {primaryImageUrl ? (
           <>
             <Image
               src={primaryImageUrl}
               alt={product.name}
               fill
-              className={`object-cover transition-all duration-700 ease-out ${
+              className={`object-contain p-3 sm:p-5 transition-all duration-700 ease-out ${
                 secondaryImageUrl
                   ? 'group-hover:opacity-0'
                   : 'group-hover:scale-105'
@@ -108,7 +108,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 src={secondaryImageUrl}
                 alt={`${product.name} foto secundaria`}
                 fill
-                className="object-cover opacity-0 group-hover:opacity-100 group-hover:scale-103 transition-all duration-700 ease-out"
+                className="object-contain p-3 sm:p-5 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
               />
             )}
@@ -120,7 +120,7 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Badges Minimalistas Kith (Esquina Superior Izquierda) */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10">
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 items-start z-10">
           {discountBadge && (
             <span className="bg-black text-white text-[9px] font-bold tracking-[0.15em] uppercase px-2 py-0.5">
               {discountBadge.label}
@@ -139,25 +139,19 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      {/* Información del Producto Tipografía Kith */}
-      <div className="pt-3 pb-1 space-y-1">
-        {categoryName && (
-          <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400 block">
-            {categoryName}
-          </span>
-        )}
-
-        <h3 className="font-semibold text-xs sm:text-sm text-zinc-900 tracking-tight leading-snug line-clamp-1 group-hover:underline underline-offset-4 decoration-zinc-900/60">
+      {/* Información del Producto Tipografía Serif Kith (Imagen 2) */}
+      <div className="pt-2.5 pb-1 space-y-0.5">
+        <h3 className="font-serif text-[12.5px] sm:text-[13.5px] text-zinc-900 font-normal leading-snug line-clamp-1 group-hover:underline underline-offset-4">
           {product.name}
         </h3>
 
-        <div className="pt-1 flex items-baseline gap-2">
-          <span className="text-xs sm:text-sm font-bold text-zinc-900 tracking-tight">
-            {formatCurrency(product.base_price)}
+        <div className="flex items-baseline gap-2 pt-0.5">
+          <span className="text-[11px] sm:text-xs text-zinc-600 font-normal tracking-tight">
+            {formatCurrency(product.base_price)} ARS
           </span>
           {hasDiscount && (
-            <span className="text-[11px] text-zinc-400 line-through font-normal">
-              {formatCurrency(product.compare_at_price)}
+            <span className="text-[10px] sm:text-[11px] text-zinc-400 line-through font-normal">
+              {formatCurrency(product.compare_at_price)} ARS
             </span>
           )}
         </div>

@@ -60,10 +60,19 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3.5 gap-y-7 sm:gap-x-6 sm:gap-y-10">
               {newArrivals.map((prod) => (
                 <ProductCard key={prod.id} product={prod} />
               ))}
+            </div>
+
+            <div className="pt-2 sm:pt-4 flex justify-center">
+              <Link
+                href="/catalogo"
+                className="border border-black bg-white hover:bg-black hover:text-white text-zinc-950 px-9 sm:px-12 py-3 text-[11px] font-bold tracking-[0.25em] uppercase transition-all duration-200"
+              >
+                SHOP ALL
+              </Link>
             </div>
           </section>
         )}
@@ -92,10 +101,19 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-3.5 gap-y-7 sm:gap-x-6 sm:gap-y-10">
               {showcaseProducts.map((prod) => (
                 <ProductCard key={prod.id} product={prod} />
               ))}
+            </div>
+
+            <div className="pt-2 sm:pt-4 flex justify-center">
+              <Link
+                href="/catalogo"
+                className="border border-black bg-white hover:bg-black hover:text-white text-zinc-950 px-9 sm:px-12 py-3 text-[11px] font-bold tracking-[0.25em] uppercase transition-all duration-200"
+              >
+                SHOP ALL
+              </Link>
             </div>
           </section>
         )}

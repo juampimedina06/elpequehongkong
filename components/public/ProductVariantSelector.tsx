@@ -7,7 +7,7 @@ import {
   resolveVariantAvailability,
 } from '@/utils/product-badges'
 import { formatCurrency, buildProductWhatsAppUrl } from '@/utils/formatters'
-import { MessageCircle, Check, ArrowRight, ShieldCheck, MapPin, Truck } from 'lucide-react'
+import { MessageCircle, Check, ArrowRight, ShieldCheck, MapPin, Store } from 'lucide-react'
 
 interface ProductVariantSelectorProps {
   productName: string
@@ -196,12 +196,12 @@ export function ProductVariantSelector({
           </span>
         </div>
         <div className="p-3 border border-black/10 bg-[#fafafa] flex flex-col items-center justify-center gap-1">
-          <Truck className="size-4 text-zinc-900 stroke-[1.5]" />
+          <Store className="size-4 text-zinc-900 stroke-[1.5]" />
           <span className="text-[10px] font-bold tracking-wider uppercase text-zinc-900">
-            Envíos Directos
+            Venta en Local
           </span>
           <span className="text-[9px] text-zinc-400 uppercase">
-            A todo el país
+            Sin envíos
           </span>
         </div>
         <div className="p-3 border border-black/10 bg-[#fafafa] flex flex-col items-center justify-center gap-1">
