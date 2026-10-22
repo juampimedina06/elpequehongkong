@@ -29,8 +29,8 @@ export function PublicNavbar() {
       {/* Ticker Superior de Anuncios (Sin mención de envíos) */}
       <div
         className={`text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center transition-colors duration-300 ${isTransparent
-          ? 'bg-black/60 text-white backdrop-blur-xs border-b border-white/10'
-          : 'bg-black text-white'
+          ? 'bg-black/60 text-white backdrop-blur-xs border-b-0'
+          : 'bg-black text-white border-b border-black'
           }`}
       >
         <div className="inline-block animate-pulse">
@@ -41,8 +41,8 @@ export function PublicNavbar() {
       {/* Barra Principal de Navegación 3 Columnas al estilo Kith */}
       <nav
         className={`transition-all duration-300 ${isTransparent
-          ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b border-transparent'
-          : 'bg-white/95 text-zinc-950 backdrop-blur-md shadow-xs'
+          ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b-0'
+          : 'bg-white/95 text-zinc-950 backdrop-blur-md border-b border-black/10 shadow-xs'
           }`}
       >
         <div className="mx-auto flex h-16 sm:h-20 max-w-[1760px] items-center justify-between px-4 sm:px-8 lg:px-12">
