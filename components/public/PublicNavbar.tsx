@@ -30,7 +30,7 @@ export function PublicNavbar() {
       <div
         className={`text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center transition-colors duration-300 ${isTransparent
           ? 'bg-black/60 text-white backdrop-blur-xs border-b border-white/10'
-          : 'bg-black text-white border-b border-black'
+          : 'bg-black text-white'
           }`}
       >
         <div className="inline-block animate-pulse">
@@ -42,7 +42,7 @@ export function PublicNavbar() {
       <nav
         className={`transition-all duration-300 ${isTransparent
           ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b border-transparent'
-          : 'bg-white/95 text-zinc-950 backdrop-blur-md border-b border-black/10 shadow-xs'
+          : 'bg-white/95 text-zinc-950 backdrop-blur-md shadow-xs'
           }`}
       >
         <div className="mx-auto flex h-16 sm:h-20 max-w-[1760px] items-center justify-between px-4 sm:px-8 lg:px-12">
@@ -114,7 +114,7 @@ export function PublicNavbar() {
               className="group flex items-center gap-2.5 sm:gap-3 text-center"
             >
               <div
-                className={`relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border shadow-2xs group-hover:scale-105 transition-all duration-300 bg-white ${isTransparent ? 'border-white/40 ring-2 ring-white/20' : 'border-black/15'
+                className={`relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border shadow-2xs group-hover:scale-105 transition-all duration-300 bg-white ${isTransparent ? 'border-white/40 ring-2 ring-white/20' : 'border-zinc-200'
                   }`}
               >
                 <Image
@@ -157,7 +157,7 @@ export function PublicNavbar() {
               href="https://wa.me/5493516561535?text=¡Hola!%20Quería%20hacerles%20una%20consulta%20sobre%20el%20catálogo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-xs transition"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-xs transition"
             >
               <MessageCircle className="size-4 fill-current" />
               <span>WhatsApp</span>
@@ -178,7 +178,7 @@ export function PublicNavbar() {
 
         {/* Menú Desplegable Mobile Claro y Accesible */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-black bg-white text-zinc-950 px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
+          <div className="lg:hidden border-t border-zinc-100 bg-white text-zinc-950 px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
             <nav className="flex flex-col gap-3 text-sm font-bold uppercase tracking-wider text-zinc-950">
               <Link
                 href="/catalogo"
