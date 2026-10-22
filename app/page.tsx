@@ -10,6 +10,7 @@ import { HeroCarousel } from '@/components/public/HeroCarousel'
 import { CategoryGrid } from '@/components/public/CategoryGrid'
 import { ProductCard } from '@/components/public/ProductCard'
 import { StoreLocationSection } from '@/components/public/StoreLocationSection'
+import { HomeSearchBar } from '@/components/public/HomeSearchBar'
 
 export const revalidate = 60
 
@@ -26,8 +27,34 @@ export default async function HomePage() {
       {/* Hero Cinematográfico Full-Bleed */}
       <HeroCarousel slides={slides} />
 
+      {/* Buscador Rápido Prominente en la Home */}
+      <section className="bg-zinc-50 border-y border-zinc-200 py-7 px-4 shadow-inner">
+        <div className="max-w-3xl mx-auto space-y-3.5 text-center">
+          <p className="text-[11px] font-bold tracking-[0.25em] uppercase text-zinc-500">
+            ¿Buscás algo puntual en nuestro local?
+          </p>
+          <HomeSearchBar />
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+            <span className="text-[11px] font-semibold text-zinc-400 mr-1">
+              Búsquedas frecuentes:
+            </span>
+            {['Bazar', 'Mochilas', 'Termos', 'Tazas', 'Vasos', 'Novedades'].map(
+              (tag) => (
+                <Link
+                  key={tag}
+                  href={`/catalogo?q=${encodeURIComponent(tag.toLowerCase())}`}
+                  className="px-2.5 py-1 rounded-full bg-white border border-zinc-200 text-zinc-700 hover:border-black hover:text-black transition text-[11px] font-medium shadow-2xs"
+                >
+                  {tag}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Banner de Declaración de Marca estilo Kith Editorial */}
-      <section className="border-y border-black bg-white py-6 sm:py-8 px-4 text-center">
+      <section className="border-b border-black bg-white py-6 sm:py-8 px-4 text-center">
         <div className="max-w-4xl mx-auto space-y-2">
           <p className="text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase text-zinc-400">
             El Peque Hong Kong

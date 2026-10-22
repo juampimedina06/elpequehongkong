@@ -141,12 +141,15 @@ export function PublicNavbar() {
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1">
             <Link
               href="/catalogo"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${isTransparent ? 'text-white hover:bg-white/10' : 'text-zinc-800 hover:bg-zinc-100'
-                }`}
-              title="Buscar en el catálogo"
-              aria-label="Buscar"
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase border transition-all duration-200 shadow-2xs group ${
+                isTransparent
+                  ? 'bg-white/15 hover:bg-white/25 text-white border-white/30 backdrop-blur-sm'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border-zinc-300'
+              }`}
+              title="Buscar productos en el catálogo"
+              aria-label="Buscar productos"
             >
-              <Search className="size-4 stroke-[2]" />
+              <Search className="size-4.5 stroke-[2.2] group-hover:scale-110 transition-transform" />
               <span className="hidden sm:inline">Buscar</span>
             </Link>
 
@@ -180,9 +183,12 @@ export function PublicNavbar() {
               <Link
                 href="/catalogo"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-3 px-3 bg-zinc-900 text-white rounded-xl flex items-center justify-between"
+                className="py-3 px-3.5 bg-zinc-900 text-white rounded-xl flex items-center justify-between shadow-xs"
               >
-                <span>Ver Catálogo Completo</span>
+                <div className="flex items-center gap-2.5">
+                  <Search className="size-4.5 text-zinc-300" />
+                  <span>Buscar Productos / Catálogo</span>
+                </div>
                 <ArrowUpRight className="size-4" />
               </Link>
               <Link
