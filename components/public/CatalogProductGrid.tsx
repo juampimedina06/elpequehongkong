@@ -27,7 +27,7 @@ export function CatalogProductGrid({
 
   const observerRef = useRef<HTMLDivElement | null>(null)
 
-  // IntersectionObserver for infinite scrolling
+  // IntersectionObserver con anticipación temprana (1000px antes del fondo)
   useEffect(() => {
     const target = observerRef.current
     if (!target) return
@@ -40,12 +40,27 @@ export function CatalogProductGrid({
         }
       },
       {
-        rootMargin: '200px', // Pre-fetch before user reaches the very bottom
+        rootMargin: '1000px 0px', // Carga con mucha anticipación antes de que el usuario llegue
       }
     )
 
     observer.observe(target)
     return () => observer.disconnect()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
+  // Listener de scroll pasivo complementario para garantizar fluidez absoluta
+  useEffect(() => {
+    const onScroll = () => {
+      if (!hasNextPage || isFetchingNextPage) return
+      const scrollPos = window.innerHeight + window.scrollY
+      const triggerThreshold = document.documentElement.scrollHeight - 1000
+      if (scrollPos >= triggerThreshold) {
+        fetchNextPage()
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const allProducts = data ? data.pages.flatMap((page) => page.products) : []

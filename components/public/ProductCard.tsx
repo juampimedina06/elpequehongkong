@@ -86,6 +86,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/producto/${product.slug}`}
+      prefetch={true}
       className="group flex flex-col justify-between bg-transparent transition-all"
     >
       {/* Contenedor de Imagen Cuadrado que se acomoda completamente a la imagen */}
