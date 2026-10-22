@@ -59,26 +59,15 @@ export function PublicNavbar() {
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
 
-            <div className="hidden lg:flex items-center gap-7 xl:gap-9 text-[11px] font-extrabold tracking-[0.2em] uppercase">
+            <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold tracking-[0.15em] uppercase">
               <Link
-                href="/#novedades"
+                href="/"
                 className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
                   }`}
               >
-                <span>Novedades</span>
+                <span>Inicio</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
-                    }`}
-                />
-              </Link>
-              <Link
-                href="/#categorias"
-                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                  }`}
-              >
-                <span>Colecciones</span>
-                <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                  className={`absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
                     }`}
                 />
               </Link>
@@ -89,18 +78,18 @@ export function PublicNavbar() {
               >
                 <span>Catálogo</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                  className={`absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
                     }`}
                 />
               </Link>
               <Link
-                href="/#destacados"
+                href="/#categorias"
                 className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
                   }`}
               >
-                <span>Destacados</span>
+                <span>Categorías</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                  className={`absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
                     }`}
                 />
               </Link>
@@ -109,9 +98,9 @@ export function PublicNavbar() {
                 className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
                   }`}
               >
-                <span>Ubicación</span>
+                <span>Dónde Estamos</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                  className={`absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
                     }`}
                 />
               </Link>
@@ -152,115 +141,104 @@ export function PublicNavbar() {
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1">
             <Link
               href="/catalogo"
-              className={`p-2 transition ${isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-800 hover:text-black'
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${isTransparent ? 'text-white hover:bg-white/10' : 'text-zinc-800 hover:bg-zinc-100'
                 }`}
               title="Buscar en el catálogo"
               aria-label="Buscar"
             >
-              <Search className="size-4.5 stroke-[1.8]" />
+              <Search className="size-4 stroke-[2]" />
+              <span className="hidden sm:inline">Buscar</span>
             </Link>
 
             <a
-              href="https://wa.me/5491100000000?text=Hola!%20Quería%20hacer%20una%20consulta%20sobre%20el%20catálogo"
+              href="https://wa.me/5493516561535?text=¡Hola!%20Quería%20hacerles%20una%20consulta%20sobre%20el%20catálogo"
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition ${isTransparent
-                ? 'bg-white text-black hover:bg-zinc-200'
-                : 'bg-black text-white hover:bg-zinc-800'
-                }`}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-xs transition"
             >
-              <MessageCircle className="size-3.5" />
+              <MessageCircle className="size-4 fill-current" />
               <span>WhatsApp</span>
             </a>
 
             <Link
               href="/admin"
-              className={`p-2 text-[10px] font-mono tracking-widest uppercase hidden md:inline-flex items-center gap-1 border-l pl-3 ml-1 transition ${isTransparent
+              className={`p-2 text-xs font-mono uppercase hidden md:inline-flex items-center gap-1 border-l pl-3 ml-1 transition opacity-70 hover:opacity-100 ${isTransparent
                 ? 'text-zinc-300 hover:text-white border-white/20'
-                : 'text-zinc-400 hover:text-zinc-900 border-zinc-200'
+                : 'text-zinc-500 hover:text-zinc-900 border-zinc-200'
                 }`}
-              title="Acceso panel de administración"
+              title="Panel de administración"
             >
               <Shield className="size-3.5" />
-              <span>Admin</span>
             </Link>
           </div>
         </div>
 
-        {/* Menú Desplegable Mobile Estilo Kith Drawer */}
+        {/* Menú Desplegable Mobile Claro y Accesible */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-black bg-white text-zinc-950 px-5 py-6 space-y-6 animate-in slide-in-from-top-2 duration-200 shadow-2xl">
-            <nav className="flex flex-col gap-4 text-xs font-bold tracking-[0.25em] uppercase text-zinc-950">
+            <nav className="flex flex-col gap-3 text-sm font-bold uppercase tracking-wider text-zinc-950">
               <Link
-                href="/#novedades"
+                href="/catalogo"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
+                className="py-3 px-3 bg-zinc-900 text-white rounded-xl flex items-center justify-between"
               >
-                <span>01 / Novedades</span>
-                <ArrowUpRight className="size-3 text-zinc-400" />
+                <span>Ver Catálogo Completo</span>
+                <ArrowUpRight className="size-4" />
+              </Link>
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-2.5 px-2 border-b border-zinc-100 flex items-center justify-between"
+              >
+                <span>Inicio</span>
+                <ArrowUpRight className="size-3.5 text-zinc-400" />
               </Link>
               <Link
                 href="/#categorias"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
+                className="py-2.5 px-2 border-b border-zinc-100 flex items-center justify-between"
               >
-                <span>02 / Colecciones</span>
-                <ArrowUpRight className="size-3 text-zinc-400" />
-              </Link>
-              <Link
-                href="/catalogo"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
-              >
-                <span>03 / Catálogo Completo</span>
-                <ArrowUpRight className="size-3 text-zinc-400" />
-              </Link>
-              <Link
-                href="/#destacados"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
-              >
-                <span>04 / Destacados &amp; Esenciales</span>
-                <ArrowUpRight className="size-3 text-zinc-400" />
+                <span>Categorías de Productos</span>
+                <ArrowUpRight className="size-3.5 text-zinc-400" />
               </Link>
               <Link
                 href="/#ubicacion"
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 border-b border-zinc-100 flex items-center justify-between"
+                className="py-2.5 px-2 border-b border-zinc-100 flex items-center justify-between"
               >
-                <span>05 / Ubicación &amp; Local</span>
-                <ArrowUpRight className="size-3 text-zinc-400" />
+                <span>Dónde Estamos y Horarios</span>
+                <ArrowUpRight className="size-3.5 text-zinc-400" />
               </Link>
             </nav>
 
             {/* Ficha Rápida del Local */}
-            <div className="p-3 bg-zinc-50 border border-black/10 space-y-1">
-              <p className="text-[11px] font-black uppercase tracking-wider text-zinc-950">
+            <div className="p-3.5 bg-zinc-50 border border-zinc-200 rounded-xl space-y-1">
+              <p className="text-xs font-bold uppercase tracking-wider text-zinc-950">
                 Av. Alem 2874, B° Villa Azalais, Córdoba
               </p>
-              <p className="text-[10px] text-zinc-500 font-mono">
+              <p className="text-[11px] text-zinc-600 font-medium">
                 Lun-Vie 9:30-13 / 16-20:30 · Sáb 9:30-20:30 · Dom 10-13
               </p>
-              <p className="text-[10px] text-zinc-600 font-bold uppercase pt-1">
-                Pagos: Efectivo · Transferencia · Crédito (+10%)
+              <p className="text-[10px] text-zinc-500 font-mono pt-1">
+                Pagos en el local: Efectivo · Transferencia · Tarjetas
               </p>
             </div>
 
             <div className="pt-1 space-y-2.5">
               <a
-                href="https://wa.me/5491100000000?text=Hola!%20Quería%20hacer%20una%20consulta%20sobre%20el%20catálogo"
+                href="https://wa.me/5493516561535?text=¡Hola!%20Quería%20hacerles%20una%20consulta%20sobre%20el%20catálogo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 bg-black py-3.5 text-xs font-black tracking-[0.2em] uppercase text-white hover:bg-zinc-800 transition"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white py-3.5 text-xs font-bold tracking-wider uppercase hover:bg-[#20bd5a] rounded-xl shadow-xs transition"
               >
-                <MessageCircle className="size-4" />
-                <span>Contacto Directo por WhatsApp</span>
+                <MessageCircle className="size-4.5 fill-current" />
+                <span>Consultar por WhatsApp (351 656-1535)</span>
               </a>
 
               <Link
                 href="/admin"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-1.5 border border-zinc-300 py-2.5 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-600 hover:text-black transition"
+                className="w-full inline-flex items-center justify-center gap-1.5 border border-zinc-200 py-2.5 text-[11px] font-medium uppercase text-zinc-500 hover:text-black rounded-xl transition"
               >
                 <Shield className="size-3.5" />
                 <span>Panel de Administración</span>

@@ -156,32 +156,25 @@ export function ProductVariantSelector({
         </div>
       )}
 
-      {/* CTA Primario estilo Botón Kith Monocromático */}
+      {/* CTA Primario: Consultar por WhatsApp */}
       <div className="space-y-3 pt-2">
         {whatsappUrl && (
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`w-full py-4 px-6 inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-black tracking-[0.2em] uppercase transition-all duration-300 ${
-              availability.status === 'out_of_stock'
-                ? 'bg-zinc-200 text-zinc-500 hover:bg-zinc-300 cursor-not-allowed'
-                : 'bg-black text-white hover:bg-zinc-800'
-            }`}
+            className="w-full py-4 px-6 inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-black tracking-[0.15em] uppercase transition-all duration-300 bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-md hover:shadow-lg rounded-xl group"
           >
-            <MessageCircle className="size-4.5 stroke-[2]" />
-            <span>
-              {availability.status === 'out_of_stock'
-                ? 'Consultar Reposición por WhatsApp'
-                : 'Pedir por WhatsApp'}
-            </span>
+            <MessageCircle className="size-5 fill-current" />
+            <span>Consultar por WhatsApp</span>
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </a>
         )}
 
-        <p className="text-center text-[10px] font-mono tracking-widest uppercase text-zinc-400">
-          Respuesta inmediata • Atención personalizada sin intermediarios
-        </p>
+        <div className="flex items-center justify-center gap-2 text-[11px] text-zinc-500 font-medium text-center">
+          <span className="size-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+          <span>Atención directa por WhatsApp • Te respondemos al instante</span>
+        </div>
       </div>
 
       {/* Grid de Beneficios Editorial Kith */}

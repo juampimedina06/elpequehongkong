@@ -101,11 +101,14 @@ export function buildProductWhatsAppUrl(params: {
   const rawPhone =
     params.phone !== undefined
       ? params.phone
-      : process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ''
-  const digits = (rawPhone ?? '').replace(/[^0-9]/g, '')
+      : process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5493516561535'
+  let digits = (rawPhone ?? '').replace(/[^0-9]/g, '')
+  if (digits.length === 10) {
+    digits = `549${digits}`
+  }
   if (!digits) return null
 
-  const parts = [`Hola! Quería consultar por el producto *${params.productName}*`]
+  const parts = [`Hola! Te consulto por el producto *${params.productName}*`]
   if (params.variantLabel) {
     parts.push(`Variante: ${params.variantLabel}`)
   }
