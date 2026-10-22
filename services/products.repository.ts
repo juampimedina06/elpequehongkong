@@ -151,6 +151,149 @@ export async function listActiveProductsWithRelations(): Promise<
   )
 }
 
+export interface PublicCatalogQueryParams {
+  page?: number
+  limit?: number
+  q?: string
+  categoria?: string
+  subcategoria?: string
+  minPrice?: number
+  maxPrice?: number
+  orden?: string
+  enStock?: boolean
+}
+
+export interface PaginatedCatalogResult {
+  products: ProductWithRelations[]
+  page: number
+  limit: number
+  totalCount: number
+  hasMore: boolean
+}
+
+export async function queryPublicCatalogPaginated(
+  params: PublicCatalogQueryParams
+): Promise<PaginatedCatalogResult> {
+  const supabase = await createClient()
+  const page = Math.max(0, Number(params.page) || 0)
+  const limit = Math.min(50, Math.max(1, Number(params.limit) || 20))
+  const from = page * limit
+  const to = from + limit - 1
+
+  const catSlug = (params.categoria ?? '').trim().toLowerCase()
+  const subcatSlug = (params.subcategoria ?? '').trim().toLowerCase()
+  const q = (params.q ?? '').trim()
+
+  // 1. Resolve category filter IDs (hierarchical)
+  let targetCategoryIds: string[] | null = null
+
+  if (subcatSlug) {
+    const { data: subcatData } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', subcatSlug)
+      .maybeSingle()
+    const foundSubcat = subcatData as { id: string } | null
+    if (foundSubcat?.id) {
+      targetCategoryIds = [foundSubcat.id]
+    } else {
+      targetCategoryIds = ['00000000-0000-0000-0000-000000000000']
+    }
+  } else if (catSlug) {
+    const { data: catData } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', catSlug)
+      .maybeSingle()
+    const foundCat = catData as { id: string } | null
+
+    if (foundCat?.id) {
+      const { data: childCats } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('parent_id', foundCat.id)
+      const foundChildren = (childCats as Array<{ id: string }> | null) ?? []
+
+      targetCategoryIds = [
+        foundCat.id,
+        ...foundChildren.map((c) => c.id),
+      ]
+    } else {
+      targetCategoryIds = ['00000000-0000-0000-0000-000000000000']
+    }
+  }
+
+  // 2. Build Supabase query
+  let query = supabase
+    .from('products')
+    .select(PRODUCT_RELATION_SELECT, { count: 'exact' })
+    .eq('status', 'active')
+
+  if (targetCategoryIds && targetCategoryIds.length > 0) {
+    query = query.in('category_id', targetCategoryIds)
+  }
+
+  if (q) {
+    const sanitized = q.replace(/[%_]/g, '')
+    if (sanitized) {
+      query = query.or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
+    }
+  }
+
+  if (typeof params.minPrice === 'number' && !Number.isNaN(params.minPrice)) {
+    query = query.gte('base_price', params.minPrice)
+  }
+
+  if (typeof params.maxPrice === 'number' && !Number.isNaN(params.maxPrice)) {
+    query = query.lte('base_price', params.maxPrice)
+  }
+
+  if (params.orden === 'precio_asc') {
+    query = query.order('base_price', { ascending: true })
+  } else if (params.orden === 'precio_desc') {
+    query = query.order('base_price', { ascending: false })
+  } else {
+    query = query.order('created_at', { ascending: false })
+  }
+
+  const { data, count, error } = await query.range(from, to)
+
+  if (error || !data) {
+    return {
+      products: [],
+      page,
+      limit,
+      totalCount: 0,
+      hasMore: false,
+    }
+  }
+
+  let mapped = (data as unknown as Array<Record<string, unknown>>).map(
+    mapRawProductWithRelations
+  )
+
+  if (params.enStock) {
+    mapped = mapped.filter((p) => {
+      const total = p.variants.reduce(
+        (acc, v) => acc + (v.stock_quantity ?? 0),
+        0
+      )
+      return total > 0
+    })
+  }
+
+  const totalCount = count ?? mapped.length
+  const hasMore = from + mapped.length < totalCount
+
+  return {
+    products: mapped,
+    page,
+    limit,
+    totalCount,
+    hasMore,
+  }
+}
+
 export async function getProductByIdWithRelations(
   id: string
 ): Promise<ProductWithRelations | null> {

@@ -28,11 +28,10 @@ export function PublicNavbar() {
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
       {/* Ticker Superior de Anuncios (Sin mención de envíos) */}
       <div
-        className={`text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center transition-colors duration-300 ${
-          isTransparent
-            ? 'bg-black/60 text-white backdrop-blur-xs border-b border-white/10'
-            : 'bg-black text-white border-b border-black'
-        }`}
+        className={`text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase py-2 px-4 text-center transition-colors duration-300 ${isTransparent
+          ? 'bg-black/60 text-white backdrop-blur-xs border-b border-white/10'
+          : 'bg-black text-white border-b border-black'
+          }`}
       >
         <div className="inline-block animate-pulse">
           Av. Alem 2874, B° Villa Azalais, Córdoba · Lun a Vie 9:30-13 / 16-20:30 · Sáb 9:30-20:30 · Dom 10-13 · Efectivo, Transf., Crédito (+10%)
@@ -41,22 +40,20 @@ export function PublicNavbar() {
 
       {/* Barra Principal de Navegación 3 Columnas al estilo Kith */}
       <nav
-        className={`transition-all duration-300 ${
-          isTransparent
-            ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b border-transparent'
-            : 'bg-white/95 text-zinc-950 backdrop-blur-md border-b border-black/10 shadow-xs'
-        }`}
+        className={`transition-all duration-300 ${isTransparent
+          ? 'bg-gradient-to-b from-black/80 via-black/35 to-transparent text-white border-b border-transparent'
+          : 'bg-white/95 text-zinc-950 backdrop-blur-md border-b border-black/10 shadow-xs'
+          }`}
       >
         <div className="mx-auto flex h-16 sm:h-20 max-w-[1760px] items-center justify-between px-4 sm:px-8 lg:px-12">
-          
+
           {/* COLUMNA IZQUIERDA: Menú Mobile & Enlaces Principales Desktop */}
           <div className="flex items-center flex-1">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`lg:hidden p-2 -ml-2 transition ${
-                isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-950 hover:text-zinc-600'
-              }`}
+              className={`lg:hidden p-2 -ml-2 transition ${isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-950 hover:text-zinc-600'
+                }`}
               aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -65,67 +62,57 @@ export function PublicNavbar() {
             <div className="hidden lg:flex items-center gap-7 xl:gap-9 text-[11px] font-extrabold tracking-[0.2em] uppercase">
               <Link
                 href="/#novedades"
-                className={`py-1 relative group transition-colors ${
-                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                }`}
+                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                  }`}
               >
                 <span>Novedades</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                    isTransparent ? 'bg-white' : 'bg-black'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                    }`}
                 />
               </Link>
               <Link
                 href="/#categorias"
-                className={`py-1 relative group transition-colors ${
-                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                }`}
+                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                  }`}
               >
                 <span>Colecciones</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                    isTransparent ? 'bg-white' : 'bg-black'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                    }`}
                 />
               </Link>
               <Link
                 href="/catalogo"
-                className={`py-1 relative group transition-colors ${
-                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                }`}
+                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                  }`}
               >
                 <span>Catálogo</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                    isTransparent ? 'bg-white' : 'bg-black'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                    }`}
                 />
               </Link>
               <Link
                 href="/#destacados"
-                className={`py-1 relative group transition-colors ${
-                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                }`}
+                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                  }`}
               >
                 <span>Destacados</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                    isTransparent ? 'bg-white' : 'bg-black'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                    }`}
                 />
               </Link>
               <Link
                 href="/#ubicacion"
-                className={`py-1 relative group transition-colors ${
-                  isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
-                }`}
+                className={`py-1 relative group transition-colors ${isTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-800 hover:text-black'
+                  }`}
               >
                 <span>Ubicación</span>
                 <span
-                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                    isTransparent ? 'bg-white' : 'bg-black'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${isTransparent ? 'bg-white' : 'bg-black'
+                    }`}
                 />
               </Link>
             </div>
@@ -138,9 +125,8 @@ export function PublicNavbar() {
               className="group flex items-center gap-2.5 sm:gap-3 text-center"
             >
               <div
-                className={`relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border shadow-2xs group-hover:scale-105 transition-all duration-300 bg-white ${
-                  isTransparent ? 'border-white/40 ring-2 ring-white/20' : 'border-black/15'
-                }`}
+                className={`relative size-9 sm:size-11 shrink-0 overflow-hidden rounded-full border shadow-2xs group-hover:scale-105 transition-all duration-300 bg-white ${isTransparent ? 'border-white/40 ring-2 ring-white/20' : 'border-black/15'
+                  }`}
               >
                 <Image
                   src="/assets/img/logo.png"
@@ -153,18 +139,10 @@ export function PublicNavbar() {
               </div>
               <div className="flex flex-col items-start text-left">
                 <span
-                  className={`font-black text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase leading-none transition-colors ${
-                    isTransparent ? 'text-white group-hover:text-zinc-200' : 'text-zinc-950 group-hover:text-zinc-700'
-                  }`}
+                  className={`font-black text-sm sm:text-base lg:text-lg tracking-[0.22em] uppercase leading-none transition-colors ${isTransparent ? 'text-white group-hover:text-zinc-200' : 'text-zinc-950 group-hover:text-zinc-700'
+                    }`}
                 >
                   El Peque Hong Kong
-                </span>
-                <span
-                  className={`text-[8px] sm:text-[9px] font-bold tracking-[0.3em] uppercase mt-1 transition-colors ${
-                    isTransparent ? 'text-zinc-300' : 'text-zinc-400'
-                  }`}
-                >
-                  Est. 2026 · Curaduría &amp; Bazar
                 </span>
               </div>
             </Link>
@@ -174,9 +152,8 @@ export function PublicNavbar() {
           <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1">
             <Link
               href="/catalogo"
-              className={`p-2 transition ${
-                isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-800 hover:text-black'
-              }`}
+              className={`p-2 transition ${isTransparent ? 'text-white hover:text-zinc-300' : 'text-zinc-800 hover:text-black'
+                }`}
               title="Buscar en el catálogo"
               aria-label="Buscar"
             >
@@ -187,11 +164,10 @@ export function PublicNavbar() {
               href="https://wa.me/5491100000000?text=Hola!%20Quería%20hacer%20una%20consulta%20sobre%20el%20catálogo"
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition ${
-                isTransparent
-                  ? 'bg-white text-black hover:bg-zinc-200'
-                  : 'bg-black text-white hover:bg-zinc-800'
-              }`}
+              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition ${isTransparent
+                ? 'bg-white text-black hover:bg-zinc-200'
+                : 'bg-black text-white hover:bg-zinc-800'
+                }`}
             >
               <MessageCircle className="size-3.5" />
               <span>WhatsApp</span>
@@ -199,11 +175,10 @@ export function PublicNavbar() {
 
             <Link
               href="/admin"
-              className={`p-2 text-[10px] font-mono tracking-widest uppercase hidden md:inline-flex items-center gap-1 border-l pl-3 ml-1 transition ${
-                isTransparent
-                  ? 'text-zinc-300 hover:text-white border-white/20'
-                  : 'text-zinc-400 hover:text-zinc-900 border-zinc-200'
-              }`}
+              className={`p-2 text-[10px] font-mono tracking-widest uppercase hidden md:inline-flex items-center gap-1 border-l pl-3 ml-1 transition ${isTransparent
+                ? 'text-zinc-300 hover:text-white border-white/20'
+                : 'text-zinc-400 hover:text-zinc-900 border-zinc-200'
+                }`}
               title="Acceso panel de administración"
             >
               <Shield className="size-3.5" />

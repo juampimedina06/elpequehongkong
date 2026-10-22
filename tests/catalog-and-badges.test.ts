@@ -272,6 +272,81 @@ describe('Work Unit 9 (TICKET-09): Catalog Filters, Product Badges & SEO', () =>
       assert.ok(filtered.every((p) => p.category?.slug === 'bazar'))
     })
 
+    test('filters hierarchically: selecting parent category includes child subcategory products', () => {
+      const mockCategories = [
+        {
+          id: 'cat-parent-pepe',
+          name: 'Pepe',
+          slug: 'pepe',
+          description: null,
+          parent_id: null,
+          image_url: null,
+          storage_path: null,
+          is_active: true,
+          display_order: 1,
+          created_at: '',
+          updated_at: '',
+        },
+        {
+          id: 'cat-child-pepito',
+          name: 'Pepito',
+          slug: 'pepito',
+          description: null,
+          parent_id: 'cat-parent-pepe',
+          image_url: null,
+          storage_path: null,
+          is_active: true,
+          display_order: 2,
+          created_at: '',
+          updated_at: '',
+        },
+      ]
+
+      const hierarchicalProducts: ProductWithRelations[] = [
+        {
+          ...mockProducts[0],
+          id: 'p-pepe-direct',
+          category_id: 'cat-parent-pepe',
+          category: mockCategories[0],
+        },
+        {
+          ...mockProducts[1],
+          id: 'p-pepito-child',
+          category_id: 'cat-child-pepito',
+          category: mockCategories[1],
+        },
+        {
+          ...mockProducts[2],
+          id: 'p-other',
+          category_id: 'cat-other',
+          category: {
+            ...mockCategories[0],
+            id: 'cat-other',
+            slug: 'otra-categoria',
+          },
+        },
+      ]
+
+      // Selecting parent 'pepe' should include both direct products and child 'pepito' products
+      const parentFiltered = filterAndSortPublicCatalog(
+        hierarchicalProducts,
+        { categoria: 'pepe' },
+        mockCategories
+      )
+      assert.equal(parentFiltered.length, 2)
+      assert.ok(parentFiltered.some((p) => p.id === 'p-pepe-direct'))
+      assert.ok(parentFiltered.some((p) => p.id === 'p-pepito-child'))
+
+      // Selecting subcategory 'pepito' strictly filters to 'pepito' only
+      const subcatFiltered = filterAndSortPublicCatalog(
+        hierarchicalProducts,
+        { categoria: 'pepe', subcategoria: 'pepito' },
+        mockCategories
+      )
+      assert.equal(subcatFiltered.length, 1)
+      assert.equal(subcatFiltered[0].id, 'p-pepito-child')
+    })
+
     test('filters by stock availability (enStock: true)', () => {
       const inStockOnly = filterAndSortPublicCatalog(mockProducts, { enStock: true })
       assert.equal(inStockOnly.length, 2)

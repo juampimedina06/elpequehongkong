@@ -14,6 +14,7 @@ import {
   type PersistProductAggregatePayload,
 } from '@/services/products.repository'
 import type {
+  CategoryRow,
   ProductRow,
   ProductStatus,
   ProductWithRelations,
@@ -555,7 +556,8 @@ export interface PublicCatalogFilterOptions {
  */
 export function filterAndSortPublicCatalog(
   products: ProductWithRelations[],
-  filters: PublicCatalogFilterOptions
+  filters: PublicCatalogFilterOptions,
+  categories?: CategoryRow[]
 ): ProductWithRelations[] {
   const query = (filters.q ?? '').trim().toLowerCase()
   const catSlug = (filters.categoria ?? '').trim().toLowerCase()
@@ -570,6 +572,31 @@ export function filterAndSortPublicCatalog(
       : undefined
   const enStockOnly = Boolean(filters.enStock)
 
+  // Pre-calculate parent-child category IDs and slugs if categories are supplied
+  let allowedCategoryIds: Set<string> | null = null
+  let allowedCategorySlugs: Set<string> | null = null
+  let parentCategoryId: string | null = null
+
+  if (catSlug && categories && categories.length > 0) {
+    const parentCategory = categories.find(
+      (c) => c.slug.toLowerCase() === catSlug
+    )
+    if (parentCategory) {
+      parentCategoryId = parentCategory.id
+      const childCategories = categories.filter(
+        (c) => c.parent_id === parentCategory.id
+      )
+      allowedCategoryIds = new Set([
+        parentCategory.id,
+        ...childCategories.map((c) => c.id),
+      ])
+      allowedCategorySlugs = new Set([
+        parentCategory.slug.toLowerCase(),
+        ...childCategories.map((c) => c.slug.toLowerCase()),
+      ])
+    }
+  }
+
   const filtered = products.filter((p) => {
     // 1. Query search
     if (query) {
@@ -583,12 +610,26 @@ export function filterAndSortPublicCatalog(
       }
     }
 
-    // 2. Category / Subcategory
+    // 2. Category / Subcategory (Hierarchical)
     if (subcatSlug) {
       if (p.category?.slug.toLowerCase() !== subcatSlug) return false
     } else if (catSlug) {
-      const matchesCat = p.category?.slug.toLowerCase() === catSlug
-      if (!matchesCat) return false
+      if (allowedCategoryIds && allowedCategorySlugs) {
+        const matchesById =
+          (p.category_id && allowedCategoryIds.has(p.category_id)) ||
+          (p.category?.id && allowedCategoryIds.has(p.category.id))
+        const matchesBySlug =
+          p.category?.slug && allowedCategorySlugs.has(p.category.slug.toLowerCase())
+        const matchesByParentId =
+          parentCategoryId && p.category?.parent_id === parentCategoryId
+
+        if (!matchesById && !matchesBySlug && !matchesByParentId) {
+          return false
+        }
+      } else {
+        const matchesDirectSlug = p.category?.slug.toLowerCase() === catSlug
+        if (!matchesDirectSlug) return false
+      }
     }
 
     // 3. Price filter

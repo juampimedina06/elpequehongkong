@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
-import { getPublicCatalogService, filterAndSortPublicCatalog } from '@/services/products.service'
+import { queryPublicCatalogPaginated } from '@/services/products.repository'
 import { listActiveCategories } from '@/services/categories.repository'
 import { PublicNavbar } from '@/components/public/PublicNavbar'
 import { PublicFooter } from '@/components/public/PublicFooter'
 import { CatalogFilters } from '@/components/public/CatalogFilters'
-import { ProductCard } from '@/components/public/ProductCard'
-import { PackageOpen } from 'lucide-react'
+import { CatalogProductGrid } from '@/components/public/CatalogProductGrid'
 
 export const revalidate = 60
 
@@ -30,12 +29,7 @@ interface CatalogoPageProps {
 export default async function CatalogoPage({ searchParams }: CatalogoPageProps) {
   const sp = await searchParams
 
-  const [allProducts, categories] = await Promise.all([
-    getPublicCatalogService(),
-    listActiveCategories(),
-  ])
-
-  const filteredProducts = filterAndSortPublicCatalog(allProducts, {
+  const filters = {
     q: sp.q,
     categoria: sp.categoria,
     subcategoria: sp.subcategoria,
@@ -43,7 +37,16 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
     maxPrice: sp.maxPrice ? Number(sp.maxPrice) : undefined,
     orden: sp.orden,
     enStock: sp.enStock === 'true',
-  })
+  }
+
+  const [initialResult, categories] = await Promise.all([
+    queryPublicCatalogPaginated({
+      ...filters,
+      page: 0,
+      limit: 20,
+    }),
+    listActiveCategories(),
+  ])
 
   const selectedCategoryName = sp.categoria
     ? categories.find((c) => c.slug === sp.categoria)?.name ?? sp.categoria
@@ -64,8 +67,8 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
               {selectedCategoryName || 'Todos los Productos'}
             </h1>
             <span className="text-xs font-mono tracking-wider text-zinc-500 uppercase">
-              {filteredProducts.length}{' '}
-              {filteredProducts.length === 1 ? 'artículo' : 'artículos'}
+              {initialResult.totalCount}{' '}
+              {initialResult.totalCount === 1 ? 'artículo' : 'artículos'}
             </span>
           </div>
         </div>
@@ -73,26 +76,11 @@ export default async function CatalogoPage({ searchParams }: CatalogoPageProps) 
         {/* Controles de Filtros */}
         <CatalogFilters categories={categories} />
 
-        {/* Grilla Editorial de Productos */}
-        {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-12">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="border border-zinc-200 bg-[#fafafa] p-12 sm:p-16 text-center space-y-3">
-            <div className="size-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-zinc-400">
-              <PackageOpen className="size-6" />
-            </div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-900">
-              No se encontraron productos
-            </h3>
-            <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-              Probá ajustando el término de búsqueda, desmarcando el filtro de stock o seleccionando otra categoría.
-            </p>
-          </div>
-        )}
+        {/* Grilla de Productos con Infinite Scroll y Caché TanStack */}
+        <CatalogProductGrid
+          initialResult={initialResult}
+          filters={filters}
+        />
       </main>
 
       <PublicFooter />

@@ -33,17 +33,35 @@ function filterProductsInClient(
   filters: {
     q?: string
     categoryId?: string
+    subcategoryId?: string
     status?: ProductStatus | 'all' | ''
-  }
+  },
+  categories: CategoryRow[] = []
 ): ProductWithRelations[] {
   const query = (filters.q ?? '').trim().toLowerCase()
   const categoryId = (filters.categoryId ?? '').trim()
+  const subcategoryId = (filters.subcategoryId ?? '').trim()
   const status = (filters.status ?? '').trim()
 
+  let familyCategoryIds: Set<string> | null = null
+  if (categoryId && categoryId !== 'all') {
+    const childIds = categories
+      .filter((c) => c.parent_id === categoryId)
+      .map((c) => c.id)
+    familyCategoryIds = new Set([categoryId, ...childIds])
+  }
+
   return products.filter((product) => {
-    if (categoryId && categoryId !== 'all' && product.category_id !== categoryId) {
-      return false
+    if (subcategoryId && subcategoryId !== 'all') {
+      if (product.category_id !== subcategoryId) {
+        return false
+      }
+    } else if (familyCategoryIds) {
+      if (!product.category_id || !familyCategoryIds.has(product.category_id)) {
+        return false
+      }
     }
+
     if (status && status !== 'all' && product.status !== status) {
       return false
     }
@@ -75,6 +93,7 @@ export function ProductsTable({
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const [subcategoryFilter, setSubcategoryFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState<ProductStatus | 'all'>('all')
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -90,14 +109,38 @@ export function ProductsTable({
     useState<ProductWithRelations | null>(null)
   const [feedbackError, setFeedbackError] = useState<string | null>(null)
 
+  const parentCategories = useMemo(
+    () => categories.filter((c) => !c.parent_id),
+    [categories]
+  )
+  const availableSubcategories = useMemo(
+    () =>
+      categoryFilter !== 'all'
+        ? categories.filter((c) => c.parent_id === categoryFilter)
+        : [],
+    [categories, categoryFilter]
+  )
+
   const filteredProducts = useMemo(
     () =>
-      filterProductsInClient(initialProducts, {
-        q: searchQuery,
-        categoryId: categoryFilter,
-        status: statusFilter,
-      }),
-    [initialProducts, searchQuery, categoryFilter, statusFilter]
+      filterProductsInClient(
+        initialProducts,
+        {
+          q: searchQuery,
+          categoryId: categoryFilter,
+          subcategoryId: subcategoryFilter,
+          status: statusFilter,
+        },
+        categories
+      ),
+    [
+      initialProducts,
+      searchQuery,
+      categoryFilter,
+      subcategoryFilter,
+      statusFilter,
+      categories,
+    ]
   )
 
   const selectedProducts = useMemo(
@@ -202,18 +245,38 @@ export function ProductsTable({
             />
           </div>
 
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 focus:border-zinc-900 focus:bg-white focus:outline-none transition"
-          >
-            <option value="all">Todas las categorías</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <select
+              value={categoryFilter}
+              onChange={(e) => {
+                setCategoryFilter(e.target.value)
+                setSubcategoryFilter('all')
+              }}
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-xs sm:text-sm text-zinc-900 focus:border-zinc-900 focus:bg-white focus:outline-none transition"
+            >
+              <option value="all">Todas las categorías</option>
+              {parentCategories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            {availableSubcategories.length > 0 && (
+              <select
+                value={subcategoryFilter}
+                onChange={(e) => setSubcategoryFilter(e.target.value)}
+                className="w-full sm:w-48 shrink-0 rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-xs sm:text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none transition"
+              >
+                <option value="all">Todas las subcategorías</option>
+                {availableSubcategories.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    ↳ {sub.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
           <select
             value={statusFilter}

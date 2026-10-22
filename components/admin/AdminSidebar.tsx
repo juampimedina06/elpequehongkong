@@ -80,6 +80,7 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={cn(
                 'flex flex-col items-center justify-center flex-1 py-1 px-1 rounded-xl transition-all duration-150 min-w-0',
                 isActive
@@ -106,7 +107,7 @@ export function AdminSidebar() {
       {/* SIDEBAR PARA COMPUTADORA / TABLET (hidden md:flex) */}
       <aside className="hidden md:flex md:w-64 shrink-0 flex-col border-r border-zinc-200 bg-white min-h-screen">
         <div className="p-4 border-b border-zinc-200">
-          <Link href="/admin" className="flex items-center gap-3 group">
+          <Link href="/admin" prefetch={true} className="flex items-center gap-3 group">
             <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-zinc-200 bg-white shadow-2xs group-hover:scale-105 transition-transform duration-200">
               <Image
                 src="/assets/img/logo.png"
@@ -143,6 +144,7 @@ export function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={true}
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all',
                   isActive

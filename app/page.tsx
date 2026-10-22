@@ -30,7 +30,7 @@ export default async function HomePage() {
       <section className="border-y border-black bg-white py-6 sm:py-8 px-4 text-center">
         <div className="max-w-4xl mx-auto space-y-2">
           <p className="text-[10px] sm:text-xs font-bold tracking-[0.3em] uppercase text-zinc-400">
-            El Peque Hong Kong — Curaduría &amp; Novedades
+            El Peque Hong Kong
           </p>
           <p className="text-sm sm:text-lg font-black uppercase tracking-tight text-zinc-950 leading-relaxed">
             Artículos importados seleccionados, bazar, accesorios y tendencias para tu día a día.

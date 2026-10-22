@@ -22,6 +22,7 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const currentCategory = searchParams.get('categoria') ?? ''
+  const currentSubcategory = searchParams.get('subcategoria') ?? ''
   const currentSort = searchParams.get('orden') ?? 'recientes'
   const inStockOnly = searchParams.get('enStock') === 'true'
 
@@ -32,7 +33,7 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
       if (searchTerm.trim() !== currentQ) {
         updateParams({ q: searchTerm.trim() || null })
       }
-    }, 300)
+    }, 350)
 
     return () => clearTimeout(handler)
   }, [searchTerm])
@@ -72,6 +73,7 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
   const hasActiveFilters = Boolean(
     searchParams.get('q') ||
       searchParams.get('categoria') ||
+      searchParams.get('subcategoria') ||
       searchParams.get('minPrice') ||
       searchParams.get('maxPrice') ||
       searchParams.get('enStock') ||
@@ -79,6 +81,12 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
   )
 
   const parentCategories = categories.filter((c) => !c.parent_id)
+  const selectedParentCategory = categories.find(
+    (c) => c.slug === currentCategory && !c.parent_id
+  )
+  const availableSubcategories = selectedParentCategory
+    ? categories.filter((c) => c.parent_id === selectedParentCategory.id)
+    : []
 
   return (
     <div className="w-full space-y-4">
@@ -161,13 +169,13 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-          {/* Categories */}
-          <div className="space-y-2">
+          {/* Categories & Subcategories */}
+          <div className="space-y-3">
             <span className="font-semibold text-zinc-900 block">Categoría</span>
             <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
               <button
                 type="button"
-                onClick={() => updateParams({ categoria: null })}
+                onClick={() => updateParams({ categoria: null, subcategoria: null })}
                 className={`px-2.5 py-1 rounded-lg text-xs font-medium transition ${
                   !currentCategory
                     ? 'bg-zinc-900 text-white shadow-xs'
@@ -183,7 +191,10 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
                     key={cat.id}
                     type="button"
                     onClick={() =>
-                      updateParams({ categoria: isSelected ? null : cat.slug })
+                      updateParams({
+                        categoria: isSelected ? null : cat.slug,
+                        subcategoria: null,
+                      })
                     }
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium transition ${
                       isSelected
@@ -196,6 +207,47 @@ export function CatalogFilters({ categories }: CatalogFiltersProps) {
                 )
               })}
             </div>
+
+            {/* Subcategorías contextuales cuando se selecciona una categoría padre */}
+            {availableSubcategories.length > 0 && (
+              <div className="pt-2 border-t border-zinc-100 flex flex-wrap items-center gap-1.5">
+                <span className="text-[10px] uppercase font-bold text-zinc-400 block w-full tracking-wider">
+                  Subcategorías en {selectedParentCategory?.name}:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => updateParams({ subcategoria: null })}
+                  className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition ${
+                    !currentSubcategory
+                      ? 'bg-zinc-900 text-white'
+                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                  }`}
+                >
+                  Todas ({selectedParentCategory?.name})
+                </button>
+                {availableSubcategories.map((sub) => {
+                  const isSubSelected = currentSubcategory === sub.slug
+                  return (
+                    <button
+                      key={sub.id}
+                      type="button"
+                      onClick={() =>
+                        updateParams({
+                          subcategoria: isSubSelected ? null : sub.slug,
+                        })
+                      }
+                      className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition ${
+                        isSubSelected
+                          ? 'bg-zinc-900 text-white'
+                          : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                      }`}
+                    >
+                      {sub.name}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           {/* Price Range */}
