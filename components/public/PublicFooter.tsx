@@ -151,9 +151,35 @@ export function PublicFooter() {
 
         </div>
 
-        {/* Línea inferior de copyright */}
-        <div className="border-t border-zinc-900 pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 gap-4">
+        {/* Línea inferior de copyright y autoría */}
+        <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 gap-4">
           <p>&copy; {new Date().getFullYear()} EL PEQUE HONG KONG. AV. ALEM 2874, CÓRDOBA.</p>
+          
+          <a
+            href="https://codiarg.vercel.app/?utm_source=elpequehongkong&utm_medium=footer_watermark"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/80 px-3 py-1 text-zinc-400 transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-900 hover:text-white"
+            title="Diseño y desarrollo web por Codiarg"
+          >
+            <span className="text-[10px] tracking-normal font-sans text-zinc-400 group-hover:text-zinc-200">
+              Desarrollado por
+            </span>
+            <div className="relative size-4 shrink-0 overflow-hidden rounded-full border border-zinc-700 bg-zinc-900">
+              <Image
+                src="/assets/img/codiarg-logo.jpg"
+                alt="Logo Codiarg"
+                fill
+                sizes="16px"
+                className="object-cover"
+              />
+            </div>
+            <span className="font-sans font-semibold tracking-wide text-zinc-200 group-hover:text-white">
+              Codiarg
+            </span>
+            <ArrowUpRight className="size-3 text-zinc-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
+          </a>
+
           <p>VENTA Y RETIRO EN LOCAL COMERCIAL</p>
         </div>
       </div>
