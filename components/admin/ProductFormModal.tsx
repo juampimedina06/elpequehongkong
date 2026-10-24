@@ -218,9 +218,9 @@ export function ProductFormModal({
       for (let i = 0; i < filesArray.length; i++) {
         const rawFile = filesArray[i]
         const compressed = await compressImageToWebP(rawFile, {
-          maxWidth: 1200,
-          quality: 0.8,
-          maxSizeKB: 150,
+          maxWidth: 1000,
+          quality: 0.75,
+          maxSizeKB: 90,
         })
         const uploaded = await uploadCatalogImage(compressed, 'products')
 

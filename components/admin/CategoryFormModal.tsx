@@ -125,9 +125,9 @@ export function CategoryFormModal({
 
       if (selectedFile) {
         const compressedWebP = await compressImageToWebP(selectedFile, {
-          maxWidth: 1200,
-          quality: 0.8,
-          maxSizeKB: 150,
+          maxWidth: 600,
+          quality: 0.75,
+          maxSizeKB: 60,
         })
         const uploaded = await uploadCatalogImage(compressedWebP, 'categories')
         finalImageUrl = uploaded.url

@@ -101,6 +101,7 @@ export function ProductCard({ product }: ProductCardProps) {
               src={primaryImageUrl}
               alt={product.name}
               fill
+              quality={70}
               className={`object-cover transition-transform duration-700 ease-out ${
                 secondaryImageUrl && isHovered
                   ? 'group-hover:opacity-0'
@@ -113,6 +114,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 src={secondaryImageUrl}
                 alt={`${product.name} foto secundaria`}
                 fill
+                quality={70}
                 className="object-cover opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
               />
