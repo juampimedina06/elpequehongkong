@@ -40,10 +40,7 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
   const dbBarClass = resolveTrafficLightClassName(storage.db.color)
   const mediaBarClass = resolveTrafficLightClassName(storage.media.color)
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-  const projectRefMatch = supabaseUrl.match(/https:\/\/([a-z0-9]+)\.supabase\.co/)
-  const projectRef = projectRefMatch ? projectRefMatch[1] : 'ywqwlizgzombxpkwtsfc'
-  const supabaseUsageUrl = `https://supabase.com/dashboard/project/${projectRef}/reports/usage`
+  const supabaseUsageUrl = 'https://supabase.com/dashboard/org/ywqwlizgzombxpkwtsfc/usage'
 
   return (
     <section
@@ -166,42 +163,54 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
         </div>
 
         {/* 3. Salida en Caché / Tráfico CDN */}
-        <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <h3 className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
-                <Globe className="size-3.5 text-zinc-600" />
-                <span>Salida en Caché / Tráfico CDN</span>
-              </h3>
-              <p className="text-[11px] text-zinc-500">
-                Límite: 5.0 GB / mes (Plan Free)
-              </p>
+        <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <h3 className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                  <Globe className="size-3.5 text-zinc-600" />
+                  <span>Salida en Caché (CDN)</span>
+                </h3>
+                <p className="text-[11px] text-zinc-500">
+                  Límite: 5.0 GB / mes (Plan Free)
+                </p>
+              </div>
+              <span className="rounded-full border border-zinc-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-zinc-700">
+                Red Cloudflare
+              </span>
             </div>
-            <span className="rounded-full border border-zinc-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-zinc-700">
-              Medido en Edge
-            </span>
+
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-baseline justify-between">
+                <span className="font-medium text-zinc-700">
+                  Protecciones Activas
+                </span>
+                <span className="font-mono text-emerald-600 font-bold text-[11px] flex items-center gap-1">
+                  <Zap className="size-3" /> AVIF & WebP
+                </span>
+              </div>
+              <div className="rounded-lg bg-zinc-100 p-2 text-[11px] text-zinc-600 space-y-1 leading-tight">
+                <div className="flex items-center justify-between">
+                  <span>Fotos secundarias:</span>
+                  <span className="font-semibold text-zinc-800">Bajo demanda</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Caché Next.js:</span>
+                  <span className="font-semibold text-zinc-800">1 año (365d)</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-1.5 text-xs">
-            <div className="flex items-baseline justify-between">
-              <span className="font-medium text-zinc-700">
-                Optimización Activa
-              </span>
-              <span className="font-mono text-emerald-600 font-bold text-[11px] flex items-center gap-1">
-                <Zap className="size-3" /> AVIF & WebP
-              </span>
-            </div>
-            <div className="rounded-lg bg-zinc-100 p-2 text-[11px] text-zinc-600 space-y-1 leading-tight">
-              <div className="flex items-center justify-between">
-                <span>Fotos secundarias:</span>
-                <span className="font-semibold text-zinc-800">Bajo demanda</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Caché Next.js:</span>
-                <span className="font-semibold text-zinc-800">1 año (365d)</span>
-              </div>
-            </div>
-          </div>
+          <a
+            href={supabaseUsageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-900 bg-zinc-900 hover:bg-black text-white px-3 py-1.5 text-[11px] font-semibold transition-colors mt-2"
+          >
+            <span>Ver Salida en Caché en Supabase</span>
+            <ExternalLink className="size-3" />
+          </a>
         </div>
       </div>
 
