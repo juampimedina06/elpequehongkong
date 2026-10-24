@@ -4,7 +4,7 @@ import {
   type DashboardMetrics,
   type TrafficLightColor,
 } from '@/services/dashboard.service'
-import { HardDrive, CheckCircle2 } from 'lucide-react'
+import { HardDrive, CheckCircle2, Globe, ExternalLink, Zap } from 'lucide-react'
 
 interface StorageMonitorCardProps {
   storage: DashboardMetrics['storage']
@@ -40,6 +40,11 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
   const dbBarClass = resolveTrafficLightClassName(storage.db.color)
   const mediaBarClass = resolveTrafficLightClassName(storage.media.color)
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+  const projectRefMatch = supabaseUrl.match(/https:\/\/([a-z0-9]+)\.supabase\.co/)
+  const projectRef = projectRefMatch ? projectRefMatch[1] : 'ywqwlizgzombxpkwtsfc'
+  const supabaseUsageUrl = `https://supabase.com/dashboard/project/${projectRef}/reports/usage`
+
   return (
     <section
       aria-label="Monitor de Consumo Supabase Free Tier"
@@ -52,27 +57,32 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
           </div>
           <div>
             <h2 className="text-sm font-bold tracking-tight text-zinc-900 leading-tight">
-              Capacidad y Almacenamiento
+              Capacidad y Consumo del Servidor
             </h2>
             <p className="text-xs text-zinc-500">
-              Espacio disponible para seguir agregando productos y fotos
+              Control de límites gratuitos de Supabase (Base de datos, Fotos y Tráfico CDN)
             </p>
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
-          <CheckCircle2 className="size-3.5 text-emerald-600" />
-          <span>Todo funcionando al 100%</span>
-        </span>
+        <a
+          href={supabaseUsageUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-full border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 px-2.5 py-1 text-[11px] font-semibold text-zinc-700 transition-colors"
+        >
+          <span>Panel de Consumo Supabase</span>
+          <ExternalLink className="size-3 text-zinc-500" />
+        </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* 1. Base de Datos / Productos */}
         <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-xs font-bold text-zinc-900">
-                Productos y Datos de la Tienda
+                Base de Datos y Productos
               </h3>
               <p className="text-[11px] text-zinc-500">
                 Capacidad total: {formatBytes(storage.db.limitBytes, 0)} (500 MB)
@@ -113,7 +123,7 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-xs font-bold text-zinc-900">
-                Fotos de Productos
+                Espacio en Disco (Storage)
               </h3>
               <p className="text-[11px] text-zinc-500">
                 Capacidad: {formatBytes(storage.media.limitBytes, 0)} (1 GB) ·{' '}
@@ -121,8 +131,8 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
                   {storage.media.totalFilesCount}
                 </strong>{' '}
                 {storage.media.totalFilesCount === 1
-                  ? 'foto cargada'
-                  : 'fotos cargadas'}
+                  ? 'foto subida'
+                  : 'fotos subidas'}
               </p>
             </div>
             <span
@@ -154,11 +164,60 @@ export function StorageMonitorCard({ storage }: StorageMonitorCardProps) {
             </div>
           </div>
         </div>
+
+        {/* 3. Salida en Caché / Tráfico CDN */}
+        <div className="rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-4 space-y-3">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h3 className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                <Globe className="size-3.5 text-zinc-600" />
+                <span>Salida en Caché / Tráfico CDN</span>
+              </h3>
+              <p className="text-[11px] text-zinc-500">
+                Límite: 5.0 GB / mes (Plan Free)
+              </p>
+            </div>
+            <span className="rounded-full border border-zinc-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-zinc-700">
+              Medido en Edge
+            </span>
+          </div>
+
+          <div className="space-y-1.5 text-xs">
+            <div className="flex items-baseline justify-between">
+              <span className="font-medium text-zinc-700">
+                Optimización Activa
+              </span>
+              <span className="font-mono text-emerald-600 font-bold text-[11px] flex items-center gap-1">
+                <Zap className="size-3" /> AVIF & WebP
+              </span>
+            </div>
+            <div className="rounded-lg bg-zinc-100 p-2 text-[11px] text-zinc-600 space-y-1 leading-tight">
+              <div className="flex items-center justify-between">
+                <span>Fotos secundarias:</span>
+                <span className="font-semibold text-zinc-800">Bajo demanda</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Caché Next.js:</span>
+                <span className="font-semibold text-zinc-800">1 año (365d)</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <p className="text-[11px] text-zinc-400 text-center sm:text-left pt-1">
-        💡 Cada foto que subís se comprime automáticamente para que cargue súper rápido en el celular de tus clientes y nunca te quedes sin espacio.
-      </p>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1 border-t border-zinc-100 text-[11px] text-zinc-500">
+        <p>
+          💡 Cada foto se comprime automáticamente a WebP &lt; 150 KB. Las fotos secundarias ya no se descargan anticipadamente en los listados para proteger tu cuota mensual.
+        </p>
+        <a
+          href={supabaseUsageUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-zinc-700 font-medium hover:underline shrink-0 flex items-center gap-1"
+        >
+          Ver consumo en vivo en Supabase <ExternalLink className="size-2.5" />
+        </a>
+      </div>
     </section>
   )
 }

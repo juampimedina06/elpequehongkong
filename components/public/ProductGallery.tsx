@@ -69,6 +69,7 @@ export function ProductGallery({ images, activeImageId }: ProductGalleryProps) {
           alt={currentImage.alt_text || 'Foto del producto'}
           fill
           priority
+          quality={80}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 55vw, 50vw"
           className={`object-cover transition-transform duration-150 ${
             isZooming ? 'scale-[2.2]' : 'scale-100'

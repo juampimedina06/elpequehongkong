@@ -36,6 +36,7 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
             fill
             priority={current.isPriority}
             sizes="100vw"
+            quality={80}
             className="object-cover opacity-75 transition-transform duration-1000 scale-100 hover:scale-102"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/20" />

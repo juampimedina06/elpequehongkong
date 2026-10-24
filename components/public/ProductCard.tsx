@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ProductWithRelations, ShowcaseProductItem } from '@/types/database.types'
@@ -16,6 +19,7 @@ function isProductWithRelations(
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false)
   let primaryImageUrl: string | null = null
   let secondaryImageUrl: string | null = null
   let totalStock = 0
@@ -62,7 +66,6 @@ export function ProductCard({ product }: ProductCardProps) {
   primaryImageUrl = primaryImageUrl?.trim() || null
   secondaryImageUrl = secondaryImageUrl?.trim() || null
 
-
   const badges = computeProductBadges({
     base_price: product.base_price,
     compare_at_price: product.compare_at_price,
@@ -86,7 +89,8 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/producto/${product.slug}`}
-      prefetch={true}
+      prefetch={false}
+      onMouseEnter={() => setIsHovered(true)}
       className="group flex flex-col justify-between bg-transparent transition-all"
     >
       {/* Contenedor de Imagen Cuadrado que se acomoda completamente a la imagen */}
@@ -98,13 +102,13 @@ export function ProductCard({ product }: ProductCardProps) {
               alt={product.name}
               fill
               className={`object-cover transition-transform duration-700 ease-out ${
-                secondaryImageUrl
+                secondaryImageUrl && isHovered
                   ? 'group-hover:opacity-0'
                   : 'group-hover:scale-105'
               }`}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, (max-width: 1536px) 20vw, 16vw"
             />
-            {secondaryImageUrl && (
+            {secondaryImageUrl && isHovered && (
               <Image
                 src={secondaryImageUrl}
                 alt={`${product.name} foto secundaria`}
